@@ -858,7 +858,6 @@ function renderFileProtocolAlert(){
         Trình duyệt (Chrome, Safari, Firefox) <b>chặn hoàn toàn</b> quyền truy cập Micro khi không phải HTTPS hoặc localhost.
         Vì vậy các nút 🎤 ghi âm và nhận diện giọng nói không hoạt động.
       </div>
-
       <div class="step-box">
         <div class="ttl">✅ 3 cách khắc phục</div>
         <ol>
@@ -870,7 +869,6 @@ function renderFileProtocolAlert(){
             Mở Terminal tại thư mục chứa file → chạy <code>python3 -m http.server 8000</code> → mở trình duyệt vào <code>http://localhost:8000/English.html</code>.</li>
         </ol>
       </div>
-
       <div class="tip-box">
         💡 <b>Trong lúc chưa sửa được</b>, ứng dụng vẫn dùng được bình thường: các bài học, nghe TTS, từ vựng, quiz, dictation đều hoạt động.
         Chỉ có tính năng <b>chấm điểm phát âm</b> cần micro. Tôi đã thêm <b>ô nhập câu trả lời</b> trong Mini-Story để bạn tự đánh giá.
@@ -1700,26 +1698,21 @@ const IDIOMS = [
 ];
 
 /* ============================================================
-   PRONUNCIATION GUIDE — FULL CONSONANTS + VOWELS
+   PRONUNCIATION GUIDE
 ============================================================ */
 const PRONUNCIATION = [
-  // ==== NHÓM PHỤ ÂM ĐẦU LƯỠI RĂNG ====
   {group:'Phụ âm đầu lưỡi răng (θ / ð)', sym:'/θ/', desc:'think, thank, month, bath, three',
    tip:'Đặt đầu lưỡi NHÔ RA GIỮA hai hàm răng (răng trên và răng dưới cắn nhẹ đầu lưỡi), thổi hơi ra như thổi nến. KHÔNG rung cổ họng.',
    viTip:'Người Việt hay đọc thành /t/ hoặc /th/ (như "th" trong "thuốc"). Hãy nhớ: LƯỠI PHẢI NHÔ RA ngoài răng mới đúng.'},
   {group:'Phụ âm đầu lưỡi răng (θ / ð)', sym:'/ð/', desc:'this, that, mother, they, weather',
    tip:'Giống /θ/ (lưỡi nhô ra giữa hai răng) NHƯNG cổ họng có RUNG. Đặt tay lên cổ, bạn sẽ cảm thấy rung.',
    viTip:'Người Việt hay đọc thành /d/ hoặc /z/. Hãy nhớ: LƯỠI NHÔ RA + RUNG cổ họng.'},
-
-  // ==== NHÓM /r/ /l/ ====
   {group:'Phụ âm /r/ và /l/', sym:'/r/', desc:'red, right, car, arrive, correct',
    tip:'Cong lưỡi lên gần vòm miệng nhưng KHÔNG chạm. Môi hơi tròn, đầu lưỡi gần như tự do.',
    viTip:'Người Việt rất hay đọc /r/ thành /z/ (như "da"). Hãy nhớ: KHÔNG dùng răng, dùng LƯỠI CONG.'},
   {group:'Phụ âm /r/ và /l/', sym:'/l/', desc:'love, light, full, feel, help',
    tip:'Đầu lưỡi CHẠM vào nướu trên (sau răng trên). Hơi thoát ra hai bên lưỡi.',
    viTip:'Phân biệt rõ: /l/ CHẠM nướu, /r/ KHÔNG chạm. Luyện: "light – right", "play – pray".'},
-
-  // ==== NHÓM ÂM MŨI ====
   {group:'Phụ âm mũi (m / n / ŋ)', sym:'/m/', desc:'man, home, come, family, mom',
    tip:'Hai môi khép lại, hơi thoát ra qua MŨI. Có rung cổ họng.',
    viTip:'Dễ với người Việt — tương tự "m" tiếng Việt.'},
@@ -1729,8 +1722,6 @@ const PRONUNCIATION = [
   {group:'Phụ âm mũi (m / n / ŋ)', sym:'/ŋ/', desc:'sing, ring, long, going, English',
    tip:'CUỐI LƯỠI nâng lên chạm vòm mềm (ngạc mềm) phía sau. Hơi thoát qua MŨI. KHÔNG có âm /g/ ở cuối.',
    viTip:'Người Việt hay thêm /g/ ở cuối thành "sing-g". Hãy nhớ: chỉ có MỘT âm mũi /ŋ/ thôi.'},
-
-  // ==== NHÓM ÂM BẬT (PLOSIVES) ====
   {group:'Phụ âm bật (p / b / t / d / k / g)', sym:'/p/', desc:'pen, apple, top, happy, cup',
    tip:'Hai môi khép lại rồi BẬT MẠNH ra, có luồng hơi mạnh. Không rung cổ họng.',
    viTip:'Khác "p" tiếng Việt: tiếng Anh có LUỒNG HƠI MẠNH (aspirated). Đặt tay trước miệng sẽ cảm thấy gió.'},
@@ -1749,8 +1740,6 @@ const PRONUNCIATION = [
   {group:'Phụ âm bật (p / b / t / d / k / g)', sym:'/g/', desc:'go, good, big, again, dog',
    tip:'CUỐI LƯỠI chạm ngạc mềm, bật ra, CÓ rung cổ họng.',
    viTip:'Tương tự "g" tiếng Việt.'},
-
-  // ==== NHÓM XÁT (FRICATIVES) ====
   {group:'Phụ âm xát (f / v / s / z / ʃ / ʒ)', sym:'/f/', desc:'fan, food, phone, laugh, off',
    tip:'Răng trên chạm nhẹ môi dưới, thổi hơi ra. Không rung cổ họng.',
    viTip:'Tương tự "ph" tiếng Việt.'},
@@ -1769,29 +1758,21 @@ const PRONUNCIATION = [
   {group:'Phụ âm xát (f / v / s / z / ʃ / ʒ)', sym:'/ʒ/', desc:'measure, vision, usually, beige',
    tip:'Giống /ʃ/ nhưng CÓ RUNG cổ họng.',
    viTip:'Ít gặp trong tiếng Việt. Luyện: "vision", "measure", "usually".'},
-
-  // ==== NHÓM AFFRICATES ====
   {group:'Phụ âm kép (tʃ / dʒ)', sym:'/tʃ/', desc:'chair, cheese, watch, nature, much',
    tip:'Đầu lưỡi chạm nướu rồi TÁCH RA NHANH thành /ʃ/. Giống "ch" tiếng Việt nhưng bật mạnh.',
    viTip:'Tương tự "ch" tiếng Việt (như "chào").'},
   {group:'Phụ âm kép (tʃ / dʒ)', sym:'/dʒ/', desc:'job, judge, bridge, age, enjoy',
    tip:'Đầu lưỡi chạm nướu rồi TÁCH RA thành /ʒ/. CÓ rung cổ họng.',
    viTip:'Người Việt hay đọc /dʒ/ thành /z/ hoặc /ch/. Hãy nhớ: BẮT ĐẦU BẰNG /d/ RỒI CHUYỂN /ʒ/.'},
-
-  // ==== NHÓM BÁN NGUYÊN ÂM ====
   {group:'Bán nguyên âm (w / j)', sym:'/w/', desc:'we, water, what, always, away',
    tip:'Môi tròn như hôn, rồi kéo về vị trí nguyên âm tiếp theo. Không rung.',
    viTip:'Giống "qu" trong "quả" nhưng chỉ dùng âm /w/.'},
   {group:'Bán nguyên âm (w / j)', sym:'/j/', desc:'yes, you, year, music, new',
    tip:'Giữ lưỡi gần vòm miệng cao, phát âm nhanh chuyển sang nguyên âm. Giống "y" trong "yêu".',
    viTip:'Tương tự "d" trong "di" nhưng phát âm nhanh hơn, không chạm lưỡi.'},
-
-  // ==== NHÓM /h/ ====
   {group:'Phụ âm /h/', sym:'/h/', desc:'hat, hello, house, behind, perhaps',
    tip:'Mở miệng thổi hơi nhẹ qua cổ họng, không rung, không chạm lưỡi.',
    viTip:'Tương tự "h" tiếng Việt nhưng nhẹ hơn.'},
-
-  // ==== NGUYÊN ÂM ====
   {group:'Nguyên âm đơn (æ / e / ɪ / iː)', sym:'/æ/', desc:'cat, bad, hand, apple, family',
    tip:'Miệng MỞ RỘNG theo chiều ngang, lưỡi THẤP, hàm dưới hạ xuống.',
    viTip:'Người Việt hay đọc /æ/ thành /e/ (như "e" tiếng Việt). Hãy mở rộng miệng hơn và hạ hàm xuống.'},
@@ -1804,7 +1785,6 @@ const PRONUNCIATION = [
   {group:'Nguyên âm đơn (æ / e / ɪ / iː)', sym:'/iː/', desc:'see, eat, she, key, people',
    tip:'Âm DÀI, miệng căng ra như đang mỉm cười, lưỡi nâng cao.',
    viTip:'Người Việt hay đọc /iː/ thành /i/ ngắn. Hãy KÉO DÀI và căng miệng.'},
-
   {group:'Nguyên âm đơn (ɒ / ɔː / ʊ / uː)', sym:'/ɒ/', desc:'hot, dog, box, job, problem',
    tip:'Miệng mở tròn, hàm hạ xuống, lưỡi thấp và hơi lùi về sau. Âm NGẮN.',
    viTip:'Giống "o" trong "ong" tiếng Việt.'},
@@ -1817,7 +1797,6 @@ const PRONUNCIATION = [
   {group:'Nguyên âm đơn (ɒ / ɔː / ʊ / uː)', sym:'/uː/', desc:'food, moon, blue, new, group',
    tip:'Môi tròn chặt như đang thổi nến, lưỡi nâng cao và lùi về sau. Âm DÀI.',
    viTip:'Giống "u" trong "ù" tiếng Việt, kéo dài.'},
-
   {group:'Nguyên âm giữa (ʌ / ə / ɜː)', sym:'/ʌ/', desc:'cup, but, love, money, country',
    tip:'Miệng mở vừa, lưỡi ở giữa (không cao không thấp), âm NGẮN và căng nhẹ.',
    viTip:'Người Việt hay đọc /ʌ/ thành /a/ hoặc /ơ/. Hãy đặt lưỡi ở giữa miệng.'},
@@ -1827,7 +1806,6 @@ const PRONUNCIATION = [
   {group:'Nguyên âm giữa (ʌ / ə / ɜː)', sym:'/ɜː/', desc:'bird, work, learn, nurse, heard',
    tip:'Miệng thả lỏng, lưỡi ở giữa và hơi cong lên. Âm DÀI. Chữ cái thường là er/ir/ur/or.',
    viTip:'Người Việt hay đọc /ɜː/ thành /ơ/. Hãy kéo dài và cong lưỡi lên nhẹ.'},
-
   {group:'Nguyên âm đôi (diphthongs)', sym:'/eɪ/', desc:'day, name, play, eight, they',
    tip:'Bắt đầu từ /e/ rồi TRƯỢT nhanh sang /ɪ/. Miệng chuyển động.',
    viTip:'Giống "ây" trong tiếng Việt nhưng trượt nhanh hơn.'},
@@ -1852,8 +1830,6 @@ const PRONUNCIATION = [
   {group:'Nguyên âm đôi (diphthongs)', sym:'/ʊə/', desc:'tour, pure, cure, sure',
    tip:'Bắt đầu từ /ʊ/ rồi trượt sang /ə/.',
    viTip:'Ghép /u/ + /ơ/ nhanh.'},
-
-  // ==== TRỌNG ÂM ====
   {group:'Trọng âm và nhịp điệu', sym:'ˈ', desc:'REcord (n) — reCORD (v), PREsent — preSENT',
    tip:'Dấu ˈ đặt TRƯỚC âm tiết được NHẤN. Âm tiết nhấn đọc to, dài, rõ hơn. Các âm tiết không nhấn thường đọc thành /ə/ (schwa).',
    viTip:'Tiếng Anh có NHỊP ĐIỆU (stress-timed) — các âm tiết nhấn cách đều nhau. Tiếng Việt không có đặc điểm này.'}
@@ -2135,15 +2111,17 @@ function stopSpeak(){
 function wait(ms){ return new Promise(res => setTimeout(res, ms)); }
 
 /* ============================================================
-   SPEECH RECOGNITION
+   SPEECH RECOGNITION (Đã sửa lỗi treo promise)
 ============================================================ */
 let recognition = null;
 let recognitionActive = false;
+let recognitionResolve = null;
 
 function startRecognition(){
   return new Promise((resolve, reject) => {
     if(!SR_AVAILABLE){ reject(new Error(IS_FILE ? 'file_protocol' : 'not_supported')); return; }
     if(recognitionActive){ try{ recognition.stop(); }catch(e){} }
+    
     recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = 'en-US';
     recognition.continuous = false;
@@ -2151,6 +2129,8 @@ function startRecognition(){
     recognition.maxAlternatives = 5;
 
     let finalText = '', interimText = '';
+    recognitionResolve = resolve;
+
     recognition.onresult = (e) => {
       interimText = '';
       for(let i = e.resultIndex; i < e.results.length; i++){
@@ -2159,14 +2139,37 @@ function startRecognition(){
         else interimText += t;
       }
     };
-    recognition.onerror = (e) => { recognitionActive = false; reject(e); };
-    recognition.onend = () => { recognitionActive = false; resolve((finalText || interimText).trim()); };
-    try{ recognition.start(); recognitionActive = true; }
-    catch(err){ recognitionActive = false; reject(err); }
+    
+    recognition.onerror = (e) => { 
+      recognitionActive = false; 
+      if(recognitionResolve) { recognitionResolve(''); recognitionResolve = null; }
+      reject(e); 
+    };
+    
+    recognition.onend = () => { 
+      recognitionActive = false; 
+      if(recognitionResolve) { recognitionResolve((finalText || interimText).trim()); recognitionResolve = null; }
+    };
+    
+    try{ 
+      recognition.start(); 
+      recognitionActive = true; 
+    } catch(err){ 
+      recognitionActive = false; 
+      if(recognitionResolve) { recognitionResolve(''); recognitionResolve = null; }
+      reject(err); 
+    }
   });
 }
+
 function stopRecognition(){
-  if(recognition && recognitionActive){ try{ recognition.stop(); }catch(e){} }
+  if(recognition && recognitionActive){ 
+    try{ recognition.stop(); }catch(e){} 
+  }
+  if(recognitionResolve){
+    recognitionResolve('');
+    recognitionResolve = null;
+  }
   recognitionActive = false;
 }
 
@@ -2407,7 +2410,7 @@ function renderDashboard(){
       <div class="path-step"><div class="num">2</div><span class="em">💎</span><h4>HỌC từ vựng</h4><p>Nhấn vào từng thẻ từ để nghe phát âm. Đọc TO theo. Đánh dấu ✓ khi đã thuộc.</p></div>
       <div class="path-step"><div class="num">3</div><span class="em">🗣️</span><h4>LUYỆN CỤM TỪ</h4><p>Nghe cụm từ, ghi âm giọng bạn và hệ thống chấm điểm đúng / tạm được.</p></div>
       <div class="path-step"><div class="num">4</div><span class="em">🎤</span><h4>MINI-STORY</h4><p>Nghe câu hỏi → TRẢ LỜI TO → GHI ÂM → nhận phản hồi. Bước quan trọng nhất!</p></div>
-      <div class="path-step"><div class="num">5</div><span class="em">🔄</span><h4>POINT OF VIEW</h4><p>Nghe lại câu chuyện ở các thì khác nhau. Học ngữ pháp tự nhiên không cần phân tích.</p></div>
+      <div class="path-step"><div class="num">5</div><span class="emoji">🔄</span><h4>POINT OF VIEW</h4><p>Nghe lại câu chuyện ở các thì khác nhau. Học ngữ pháp tự nhiên không cần phân tích.</p></div>
       <div class="path-step"><div class="num">6</div><span class="em">⌨️</span><h4>DICTATION</h4><p>Nghe và gõ lại từng câu. Kiểm tra chính tả và khả năng nghe chi tiết từng từ.</p></div>
       <div class="path-step"><div class="num">7</div><span class="em">✅</span><h4>KIỂM TRA</h4><p>Làm quiz để xác nhận đã hiểu. Đạt ≥60% để hoàn thành và mở khóa bài tiếp theo.</p></div>
     </div>
@@ -3153,14 +3156,21 @@ function markPhraseLearned(phrase){
 let phraseRecIdx = null;
 async function togglePhraseRecord(idx){
   if(!SR_AVAILABLE){ showMicErrorOnce(); return; }
-  if(phraseRecIdx === idx){ stopRecognition(); return; }
-  if(phraseRecIdx !== null){ stopRecognition(); await wait(300); }
-  phraseRecIdx = idx;
   const lesson = LESSONS.find(l => l.id === currentLessonId);
   if(!lesson) return;
   const phrase = lesson.phrases[idx];
   const btn = document.getElementById('recbtn-' + idx);
   const resultBox = document.getElementById('phraseresult-' + idx);
+
+  if(phraseRecIdx === idx){
+    if(btn){ btn.classList.remove('recording'); btn.textContent = '⏳ Đang chờ...'; }
+    stopRecognition();
+    return;
+  }
+  
+  if(phraseRecIdx !== null){ stopRecognition(); await wait(300); }
+  
+  phraseRecIdx = idx;
   if(btn){ btn.classList.add('recording'); btn.textContent = '⏹ Dừng & Chấm'; }
   if(resultBox){ resultBox.innerHTML = `<div class="record-hint">🔴 Đang ghi âm... Hãy nói to cụm từ trên.</div>`; }
 
@@ -3168,6 +3178,12 @@ async function togglePhraseRecord(idx){
     const transcript = await startRecognition();
     phraseRecIdx = null;
     if(btn){ btn.classList.remove('recording'); btn.textContent = '🎤 Chấm điểm'; }
+    
+    if(!transcript){
+      if(resultBox){ resultBox.innerHTML = `<div class="record-hint" style="color:#ffa9ba">❌ Không nhận diện được giọng nói. Hãy thử lại và nói to hơn.</div>`; }
+      return;
+    }
+
     const score = similarityScore(transcript, phrase.p);
     const cls = classifyScore(score);
     showPhraseResult(idx, phrase, transcript, score, cls);
@@ -3184,7 +3200,7 @@ async function togglePhraseRecord(idx){
   }catch(err){
     phraseRecIdx = null;
     if(btn){ btn.classList.remove('recording'); btn.textContent = '🎤 Chấm điểm'; }
-    if(resultBox){ resultBox.innerHTML = `<div class="record-hint" style="color:#ffa9ba">❌ Không nhận diện được. ${IS_FILE?'Cần chạy qua HTTPS/localhost.':IS_SECURE?'Kiểm tra micro và thử lại.':''}</div>`; }
+    if(resultBox){ resultBox.innerHTML = `<div class="record-hint" style="color:#ffa9ba">❌ Lỗi nhận diện. Hãy thử lại.</div>`; }
   }
 }
 
@@ -3229,9 +3245,7 @@ function showPhraseResult(idx, phrase, transcript, score, cls){
     </div>`;
 }
 
-/* ============================================================
-   MINI-STORY — đã cải tiến: luôn hiện nút, có ô nhập câu trả lời
-============================================================ */
+/* MINI-STORY */
 const miniPlayer = { playing:false, cancelled:false, index:0, currentAnswer:null, currentQ:null, textAnswer:'' };
 
 function renderMiniTab(lesson){
@@ -3377,7 +3391,6 @@ async function playMiniStory(lesson){
     await speak(item.q, state.rate);
     if(miniPlayer.cancelled) break;
 
-    // Hiển thị nút ghi âm LUÔN (không ẩn)
     const recBtn = document.getElementById('miniRecordBtn');
     if(recBtn){
       recBtn.style.display = 'inline-flex';
@@ -3500,12 +3513,18 @@ function runCountdown(seconds){
 let miniRecActive = false;
 async function toggleMiniRecord(){
   if(!SR_AVAILABLE){ showMicErrorOnce(); return; }
-  if(miniRecActive){ stopRecognition(); return; }
   const expected = miniPlayer.currentAnswer;
   if(!expected){ toast('Chưa có câu hỏi.', ''); return; }
-  miniRecActive = true;
   const recBtn = document.getElementById('miniRecordBtn');
   const stage = document.getElementById('miniStage');
+
+  if(miniRecActive){
+    if(recBtn){ recBtn.classList.remove('recording'); recBtn.textContent = '⏳ Đang chờ...'; }
+    stopRecognition();
+    return;
+  }
+
+  miniRecActive = true;
   if(recBtn){ recBtn.classList.add('recording'); recBtn.textContent = '⏹ Dừng & Chấm'; }
   if(stage) stage.classList.add('recording');
 
@@ -3514,6 +3533,12 @@ async function toggleMiniRecord(){
     miniRecActive = false;
     if(recBtn){ recBtn.classList.remove('recording'); recBtn.textContent = '🎤 Ghi âm lại'; }
     if(stage) stage.classList.remove('recording');
+    
+    if(!transcript){
+      showMiniResult('(Không nghe thấy gì)', expected, 0, { label:'LỖI', cls:'bad', icon:'❌', desc:'Không nhận diện được. Hãy nói to và rõ hơn.' });
+      return;
+    }
+
     const score = similarityScore(transcript, expected);
     const cls = classifyScore(score);
     showMiniResult(transcript, expected, score, cls);
@@ -3633,16 +3658,29 @@ async function playPov(i){
 let povRecActive = false;
 async function readPovAndRecord(i){
   if(!SR_AVAILABLE){ showMicErrorOnce(); return; }
-  if(povRecActive){ stopRecognition(); return; }
   const lesson = LESSONS.find(l => l.id === currentLessonId);
   if(!lesson) return;
   const expected = lesson.pov[i].text;
-  povRecActive = true;
   const box = document.getElementById('povresult-' + i);
+  
+  if(povRecActive){
+    if(box) box.innerHTML = `<div class="record-hint" style="color:#ffa9ba;margin-top:12px">⏳ Đang chờ kết quả...</div>`;
+    stopRecognition();
+    return;
+  }
+  
+  povRecActive = true;
   if(box) box.innerHTML = `<div class="record-hint" style="color:#ffa9ba;margin-top:12px">🔴 Đang ghi âm... Đọc to đoạn văn.</div>`;
+  
   try{
     const transcript = await startRecognition();
     povRecActive = false;
+    
+    if(!transcript){
+      if(box) box.innerHTML = `<div class="record-hint" style="color:#ffa9ba;margin-top:12px">❌ Không nhận diện được. Hãy thử lại và đọc to hơn.</div>`;
+      return;
+    }
+
     const score = similarityScore(transcript, expected);
     const cls = classifyScore(score);
     const pct = Math.round(score * 100);
@@ -3669,7 +3707,7 @@ async function readPovAndRecord(i){
     checkAchievements();
   }catch(err){
     povRecActive = false;
-    if(box) box.innerHTML = `<div class="record-hint" style="color:#ffa9ba;margin-top:12px">❌ Không nhận diện được. Thử lại nhé.</div>`;
+    if(box) box.innerHTML = `<div class="record-hint" style="color:#ffa9ba;margin-top:12px">❌ Lỗi nhận diện. Thử lại nhé.</div>`;
   }
 }
 
@@ -4424,12 +4462,11 @@ function renderIdioms(){
 }
 
 /* ============================================================
-   PRONUNCIATION VIEW — Grouped by category
+   PRONUNCIATION VIEW
 ============================================================ */
 function renderPronunciation(){
   pageTitle.innerHTML = 'Phát âm<small>Hướng dẫn chi tiết các âm khó cho người Việt</small>';
 
-  // Group by .group
   const groups = {};
   PRONUNCIATION.forEach(p => {
     if(!groups[p.group]) groups[p.group] = [];

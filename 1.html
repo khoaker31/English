@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mochi Listen Pro — Luyện nghe tiếng Anh chuyên sâu</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@1/dist/umd/lucide.min.js"></script>
+<style>
+:root{
+  --bg:#fdf7f3;--card:#ffffff;--text:#2d2330;--muted:#8a7d87;
+  --accent:#e0528a;--accent-soft:rgba(224,82,138,.13);
+  --accent2:#e8912d;--accent2-soft:rgba(232,145,45,.14);
+  --border:rgba(45,35,48,.09);--ok:#2e9e6b;--ok-soft:rgba(46,158,107,.13);
+  --bad:#d64545;--bad-soft:rgba(214,69,69,.12);--shadow:0 1px 3px rgba(0,0,0,.05);
+}
+body.dark{
+  --bg:#1a1420;--card:#261e2e;--text:#f0e9f2;--muted:#a89aa8;
+  --border:rgba(240,233,242,.12);--shadow:0 1px 3px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Fredoka",system-ui,sans-serif;line-height:1.5;transition:background .3s ease,color .3s ease;min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;color:var(--text)}
+.app{max-width:860px;margin:0 auto;padding:20px 16px 100px;position:relative}
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 18px rgba(224,82,138,.35)}
+.brand h1{font-size:22px;font-weight:700;line-height:1.1}
+.brand p{font-size:11px;color:var(--muted)}
+.icon-btn{width:40px;height:40px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text);transition:transform .15s ease,background .15s ease;flex-shrink:0}
+.icon-btn:active{transform:scale(.94)}
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(420px,calc(100% - 24px));background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.12);display:flex;padding:6px;z-index:50}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;font-size:10px;font-weight:600;color:var(--muted);transition:all .2s ease}
+.nav-item.active{background:var(--accent-soft);color:var(--accent)}
+.nav-item svg{width:20px;height:20px}
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.card-hover:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(224,82,138,.14);border-color:var(--accent)}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:14px;font-weight:600;font-size:14px;transition:transform .12s ease,background .15s ease,opacity .15s ease;border:1px solid transparent}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:var(--card);border-color:var(--border);color:var(--text)}
+.btn-ok{background:var(--ok);color:#fff}
+.btn-ghost{background:transparent;color:var(--muted)}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:10px}
+/* Progress */
+.progress-track{height:8px;border-radius:99px;background:rgba(128,128,128,.14);overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s cubic-bezier(.4,0,.2,1)}
+/* Tabs (steps) */
+.step-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.step-tab{flex:1;min-width:110px;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:600;transition:all .2s ease;justify-content:center}
+.step-tab.active{background:var(--accent-soft);border-color:var(--accent);color:var(--text)}
+.step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--accent-soft);color:var(--accent);flex-shrink:0}
+.step-tab.done .step-num{background:var(--ok);color:#fff}
+/* Flashcard */
+.flip-card{perspective:1400px;height:280px;margin:14px 0}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;border:1px solid var(--border)}
+.flip-front{background:linear-gradient(150deg,var(--card),var(--accent-soft))}
+.flip-back{transform:rotateY(180deg);background:linear-gradient(150deg,var(--card),var(--accent2-soft))}
+/* Options */
+.opt-btn{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;background:var(--card);border:1.5px solid var(--border);color:var(--text);font-size:14px;font-weight:500;text-align:left;margin-bottom:8px;transition:all .15s ease}
+.opt-btn:hover{border-color:var(--accent)}
+.opt-btn.selected{background:var(--accent-soft);border-color:var(--accent)}
+.opt-btn.correct{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.opt-btn.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.opt-letter{width:26px;height:26px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+/* Sentence row */
+.sent-row{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;transition:all .2s ease}
+.sent-row.playing{background:var(--accent-soft);border-color:var(--accent)}
+.sent-play{width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.sent-play svg{width:14px;height:14px}
+/* Filter chips */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{padding:7px 16px;border-radius:99px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:600;transition:all .15s ease}
+.chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* Speed / voice buttons */
+.seg{display:inline-flex;background:rgba(128,128,128,.1);border-radius:10px;padding:3px;gap:2px}
+.seg button{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--muted);transition:all .15s ease}
+.seg button.active{background:var(--accent);color:#fff}
+select{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;max-width:100%}
+/* Dictation input */
+.dict-input{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);font-size:15px;transition:border-color .15s ease}
+.dict-input:focus{outline:none;border-color:var(--accent)}
+/* Fade in */
+.fade-in{animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pulse-dot{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* Confetti canvas */
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:100}
+/* Stat grid */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat-box{padding:18px;border-radius:18px;background:var(--card);border:1px solid var(--border);text-align:center}
+.stat-num{font-size:28px;font-weight:700;color:var(--accent);line-height:1.1}
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+/* Bar chart */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:12px}
+.bar-label{width:110px;flex-shrink:0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:18px;background:rgba(128,128,128,.12);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:#fff;font-size:10px;font-weight:700;min-width:28px}
+/* Recording */
+.rec-btn{width:56px;height:56px;border-radius:50%;background:var(--bad);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 0 rgba(214,69,69,.5);transition:box-shadow .3s ease}
+.rec-btn.recording{animation:recPulse 1.2s ease-in-out infinite}
+@keyframes recPulse{0%{box-shadow:0 0 0 0 rgba(214,69,69,.5)}70%{box-shadow:0 0 0 18px rgba(214,69,69,0)}100%{box-shadow:0 0 0 0 rgba(214,69,69,0)}}
+/* Level colors */
+.lv-A{background:var(--ok-soft);color:var(--ok)}
+.lv-B{background:var(--accent2-soft);color:var(--accent2)}
+.lv-C{background:var(--accent-soft);color:var(--accent)}
+/* Utility */
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.xsmall{font-size:11px}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}
+.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}
+.flex-wrap{flex-wrap:wrap}
+.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mt-4{margin-top:16px}.mb-3{margin-bottom:12px}.mb-4{margin-bottom:16px}
+.w-full{width:100%}.text-center{text-align:center}
+.section-title{font-size:17px;font-weight:700;margin-bottom:4px}
+.section-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+
+.wave{display:inline-flex;align-items:flex-end;gap:2px;height:14px;vertical-align:middle}
+.wave span{width:3px;background:var(--accent);border-radius:2px;animation:wv 1s ease-in-out infinite}
+.wave span:nth-child(2){animation-delay:.15s}.wave span:nth-child(3){animation-delay:.3s}.wave span:nth-child(4){animation-delay:.45s}
+@keyframes wv{0%,100%{height:4px}50%{height:14px}}
+.cal-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:10px}
+.cal-cell{aspect-ratio:1;border-radius:3px;background:rgba(128,128,128,.12)}
+.cal-l1{background:var(--accent-soft)}.cal-l2{background:var(--accent)}.cal-l3{background:var(--accent2)}
+.cal-legend{display:flex;align-items:center;gap:4px;margin-top:8px}
+.cal-legend .cal-cell{width:12px;height:12px}
+.day-plan{background:linear-gradient(135deg,var(--accent-soft),var(--accent2-soft));border-radius:14px;padding:14px;margin-bottom:14px;border:1px solid var(--border)}
+.day-plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;margin-top:8px}
+.day-plan-item{background:var(--card);border-radius:8px;padding:6px 8px;font-size:11px}
+.deep-badge{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff!important}
+.persona-pill{display:inline-block;font-size:10px;padding:1px 7px;border-radius:8px;margin-left:6px;font-weight:700;vertical-align:middle;letter-spacing:.2px}
+@media(max-width:480px){.brand h1{font-size:18px}.stat-num{font-size:22px}.step-tab{min-width:100%;font-size:11px}}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="app">
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon"><i data-lucide="headphones" style="color:#fff;width:24px;height:24px"></i></div>
+      <div>
+        <h1>Mochi Listen <span style="color:var(--accent2)">Pro</span></h1>
+        <p>Intensive Listening · 4 bước khoa học</p>
+      </div>
+    </div>
+    <button class="icon-btn" data-action="toggle-dark" title="Chế độ tối"><i data-lucide="moon" style="width:18px;height:18px"></i></button>
+  </div>
+  <div id="app"></div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-item active" data-action="nav" data-view="learn"><i data-lucide="book-open"></i><span>Học</span></button>
+  <button class="nav-item" data-action="nav" data-view="stats"><i data-lucide="bar-chart-3"></i><span>Thống kê</span></button>
+  <button class="nav-item" data-action="nav" data-view="vocab"><i data-lucide="notebook-pen"></i><span>Sổ từ</span></button>
+  <button class="nav-item" data-action="nav" data-view="settings"><i data-lucide="settings-2"></i><span>Cài đặt</span></button>
+</nav>
+
+<script>
+(function(){
+"use strict";
+/* ==================== DATA: 12 bài A1 -> C1 ==================== */
+var LESSONS = [
+{id:1,title:"Greetings & Introductions",topic:"Chào hỏi, giới thiệu bản thân",level:"A1",minutes:3,
+ vocab:[{w:"name",ph:"/neɪm/",m:"tên",ex:"My name is Anna."},{w:"nice to meet you",ph:"/naɪs tə miːt juː/",m:"rất vui được gặp bạn",ex:"Nice to meet you, John."},{w:"country",ph:"/ˈkʌntri/",m:"đất nước",ex:"I come from a small country."},{w:"job",ph:"/dʒɒb/",m:"công việc",ex:"My job is a teacher."},{w:"live",ph:"/lɪv/",m:"sống, ở",ex:"I live in Hanoi."},{w:"friend",ph:"/frend/",m:"bạn bè",ex:"She is my best friend."}],
+ dialogue:[{sp:"Anna",t:"Hello! My name is Anna. What is your name?"},{sp:"Tom",t:"Hi Anna! I am Tom. Nice to meet you."},{sp:"Anna",t:"Nice to meet you too, Tom. Where are you from?"},{sp:"Tom",t:"I am from Canada. I live in Toronto."},{sp:"Anna",t:"Oh, Canada! What is your job there?"},{sp:"Tom",t:"I am a doctor. And what do you do?"},{sp:"Anna",t:"I am a student. I study English."}],
+ trans:["Xin chào! Tên tôi là Anna. Bạn tên gì?","Chào Anna! Tôi là Tom. Rất vui được gặp bạn.","Tôi cũng rất vui được gặp bạn, Tom. Bạn đến từ đâu?","Tôi đến từ Canada. Tôi sống ở Toronto.","Ồ, Canada! Công việc của bạn ở đó là gì?","Tôi là bác sĩ. Còn bạn làm nghề gì?","Tôi là sinh viên. Tôi học tiếng Anh."],
+ quiz:[{q:"Tom đến từ nước nào?",opts:["Canada","Nhật Bản","Pháp"],a:0,ex:"Tom nói: 'I am from Canada.'"},{q:"Tom làm nghề gì?",opts:["Giáo viên","Bác sĩ","Sinh viên"],a:1,ex:"'I am a doctor.'"},{q:"Anna học gì?",opts:["Y","Tiếng Anh","Kinh tế"],a:1,ex:"'I study English.'"},{q:"Tom sống ở thành phố nào?",opts:["Toronto","Ottawa","Vancouver"],a:0,ex:"'I live in Toronto.'"},{q:"Ai là sinh viên?",opts:["Anna","Tom","Cả hai"],a:0,ex:"Anna nói 'I am a student.'"}]},
+{id:2,title:"At the Supermarket",topic:"Đi siêu thị mua sắm",level:"A1",minutes:4,
+ vocab:[{w:"price",ph:"/praɪs/",m:"giá cả",ex:"What is the price of this bread?"},{w:"cheap",ph:"/tʃiːp/",m:"rẻ",ex:"These apples are very cheap."},{w:"expensive",ph:"/ɪkˈspensɪv/",m:"đắt",ex:"The meat is too expensive."},{w:"basket",ph:"/ˈbɑːskɪt/",m:"giỏ hàng",ex:"Take a basket, please."},{w:"cashier",ph:"/kæˈʃɪə/",m:"thu ngân",ex:"The cashier is very friendly."},{w:"receipt",ph:"/rɪˈsiːt/",m:"hóa đơn",ex:"Can I have a receipt, please?"}],
+ dialogue:[{sp:"Customer",t:"Excuse me, how much is this milk?"},{sp:"Staff",t:"It is two dollars. It is on sale today."},{sp:"Customer",t:"Great, that is cheap. And these oranges?"},{sp:"Staff",t:"They are three dollars a kilo."},{sp:"Customer",t:"OK, I will take two kilos. Where can I pay?"},{sp:"Staff",t:"Please go to the cashier over there."},{sp:"Cashier",t:"That is eight dollars in total. Do you need a bag?"},{sp:"Customer",t:"No, thank you. I have my own bag."}],
+ trans:["Xin lỗi, sữa này giá bao nhiêu ạ?","Hai đô. Hôm nay đang giảm giá ạ.","Tuyệt vời, rẻ quá. Còn những quả cam này thì sao?","Ba đô một ký ạ.","Được, tôi lấy hai ký. Tôi trả tiền ở đâu ạ?","Xin quý khách vui lòng ra quầy thu ngân bên kia.","Tổng cộng là tám đô. Quý khách có cần túi không?","Không ạ, cảm ơn. Tôi có túi riêng."],
+ quiz:[{q:"Sữa giá bao nhiêu?",opts:["$1","$2","$3"],a:1,ex:"'It is two dollars.'"},{q:"Cam giá bao nhiêu một ký?",opts:["$2","$3","$8"],a:1,ex:"'Three dollars a kilo.'"},{q:"Khách mua mấy ký cam?",opts:["1 ký","2 ký","3 ký"],a:1,ex:"'I will take two kilos.'"},{q:"Khách trả tiền ở đâu?",opts:["Quầy thu ngân","Cửa ra vào","Trực tiếp nhân viên"],a:0,ex:"'Please go to the cashier over there.'"},{q:"Tổng cộng hóa đơn là bao nhiêu?",opts:["$2","$3","$8"],a:2,ex:"'That is eight dollars in total.'"}]},
+{id:3,title:"The Weather Today",topic:"Nói về thời tiết",level:"A2",minutes:3,
+ vocab:[{w:"sunny",ph:"/ˈsʌni/",m:"nắng",ex:"It is sunny and warm today."},{w:"rainy",ph:"/ˈreɪni/",m:"mưa",ex:"Bring an umbrella, it is rainy."},{w:"temperature",ph:"/ˈtemprətʃə/",m:"nhiệt độ",ex:"The temperature is 25 degrees."},{w:"cloudy",ph:"/ˈklaʊdi/",m:"có mây",ex:"It is cloudy but not cold."},{w:"forecast",ph:"/ˈfɔːkɑːst/",m:"dự báo thời tiết",ex:"The forecast says it will snow."},{w:"windy",ph:"/ˈwɪndi/",m:"có gió",ex:"It is very windy outside."}],
+ dialogue:[{sp:"Lisa",t:"What a beautiful day! It is sunny and warm."},{sp:"Mark",t:"Yes, the temperature is around 25 degrees."},{sp:"Lisa",t:"Perfect weather for a walk in the park."},{sp:"Mark",t:"But the forecast says it will be rainy tomorrow."},{sp:"Lisa",t:"Really? I hope it does not rain on Saturday."},{sp:"Mark",t:"Saturday will be cloudy but dry, they say."},{sp:"Lisa",t:"Good. It is also quite windy today, isn't it?"},{sp:"Mark",t:"A little. Let us enjoy the sun while it lasts!"}],
+ trans:["Một ngày đẹp trời làm sao! Trời nắng và ấm áp.","Phải, nhiệt độ khoảng 25 độ.","Thời tiết hoàn hảo để đi dạo trong công viên.","Nhưng dự báo nói ngày mai sẽ có mưa.","Thật sao? Tôi hy vọng thứ Bảy không mưa.","Người ta nói thứ Bảy sẽ có mây nhưng không mưa.","Tốt quá. Hôm nay cũng khá nhiều gió phải không?","Một chút thôi. Chúng ta hãy tận hưởng nắng trong khi còn đi!"],
+ quiz:[{q:"Hôm nay thời tiết thế nào?",opts:["Nắng ấm","Mưa lạnh","Có tuyết"],a:0,ex:"'It is sunny and warm.'"},{q:"Nhiệt độ khoảng bao nhiêu?",opts:["15 độ","20 độ","25 độ"],a:2,ex:"'Around 25 degrees.'"},{q:"Ngày mai dự báo thế nào?",opts:["Nắng","Mưa","Có tuyết"],a:1,ex:"'It will be rainy tomorrow.'"},{q:"Thứ Bảy dự báo thế nào?",opts:["Mưa to","Có mây nhưng khô ráo","Nắng nóng"],a:1,ex:"'Saturday will be cloudy but dry, they say.'"},{q:"Hôm nay ngoài nắng ấm còn có gì?",opts:["Có gió","Tuyết rơi","Sương mù dày"],a:0,ex:"'It is also quite windy today, isn't it?'"}]},
+{id:4,title:"Ordering Coffee",topic:"Đặt đồ uống ở quán cà phê",level:"A2",minutes:3,
+ vocab:[{w:"latte",ph:"/ˈlɑːteɪ/",m:"cà phê latte (sữa)",ex:"I will have a medium latte."},{w:"to go",ph:"/tə ɡəʊ/",m:"mang về",ex:"A coffee to go, please."},{w:"sugar",ph:"/ˈʃʊɡə/",m:"đường",ex:"How many sugars would you like?"},{w:"size",ph:"/saɪz/",m:"kích thước (ly)",ex:"What size would you like?"},{w:"change",ph:"/tʃeɪndʒ/",m:"tiền thừa",ex:"Here is your change."},{w:"ready",ph:"/ˈredi/",m:"sẵn sàng, xong",ex:"Your order will be ready soon."}],
+ dialogue:[{sp:"Barista",t:"Hi there! What can I get for you today?"},{sp:"Customer",t:"Hi, can I get a medium latte to go, please?"},{sp:"Barista",t:"Sure. What size would you like? We have small, medium and large."},{sp:"Customer",t:"Medium, please. And just one sugar."},{sp:"Barista",t:"That is four dollars fifty. You can pay over there."},{sp:"Customer",t:"Here is five dollars. Keep the change, please."},{sp:"Barista",t:"Thank you! Your latte will be ready in two minutes."}],
+ trans:["Xin chào! Hôm nay tôi có thể giúp gì cho bạn?","Chào ạ, cho tôi một ly latte cỡ vừa mang về ạ.","Được ạ. Bạn muốn size nào? Chúng tôi có nhỏ, vừa và lớn.","Vừa ạ. Và cho một đường nhé.","Tổng cộng bốn đô năm mươi. Bạn có thể trả ở phía bên kia.","Đây là năm đô. Cô giữ tiền thừa giúp tôi nhé.","Cảm ơn bạn! Ly latte của bạn sẽ xong trong hai phút."],
+ quiz:[{q:"Khách đặt size nào?",opts:["Small","Medium","Large"],a:1,ex:"Khách nói 'a medium latte'."},{q:"Khách muốn mấy đường?",opts:["Không đường","Một đường","Hai đường"],a:1,ex:"'Just one sugar.'"},{q:"Tổng cộng bao nhiêu tiền?",opts:["$4.50","$5.00","$2.00"],a:0,ex:"'That is four dollars fifty.'"},{q:"Khách đưa bao nhiêu tiền?",opts:["$4.50","$5","$10"],a:1,ex:"'Here is five dollars.'"},{q:"Ly latte sẽ sẵn sàng sau bao lâu?",opts:["1 phút","2 phút","5 phút"],a:1,ex:"'Will be ready in two minutes.'"}]},
+{id:5,title:"Asking for Directions",topic:"Hỏi đường",level:"A2",minutes:4,
+ vocab:[{w:"straight",ph:"/streɪt/",m:"đi thẳng",ex:"Go straight for two blocks."},{w:"turn left",ph:"/tɜːn left/",m:"rẽ trái",ex:"Turn left at the corner."},{w:"turn right",ph:"/tɜːn raɪt/",m:"rẽ phải",ex:"Turn right at the traffic light."},{w:"corner",ph:"/ˈkɔːnə/",m:"góc đường",ex:"The bank is on the corner."},{w:"block",ph:"/blɒk/",m:"khối nhà",ex:"It is three blocks away."},{w:"opposite",ph:"/ˈɒpəzɪt/",m:"đối diện",ex:"The shop is opposite the park."}],
+ dialogue:[{sp:"Tourist",t:"Excuse me, could you tell me how to get to the museum?"},{sp:"Local",t:"Of course! Go straight down this street."},{sp:"Tourist",t:"OK, go straight. And then?"},{sp:"Local",t:"Then turn left at the second corner."},{sp:"Tourist",t:"Second corner, turn left. Got it."},{sp:"Local",t:"Walk two more blocks. The museum is opposite the park."},{sp:"Tourist",t:"Thank you so much! Is it far from here?"},{sp:"Local",t:"Not at all, about ten minutes on foot."}],
+ trans:["Xin lỗi, bạn có thể chỉ tôi đường đến bảo tàng được không?","Tất nhiên! Đi thẳng xuống phố này.","OK, đi thẳng. Rồi thì sao ạ?","Sau đó rẽ trái ở góc đường thứ hai.","Góc thứ hai, rẽ trái. Tôi hiểu rồi.","Đi thêm hai khối nhà nữa. Bảo tàng đối diện công viên.","Cảm ơn bạn rất nhiều! Nó có xa đây không?","Không xa chút nào, đi bộ khoảng mười phút."],
+ quiz:[{q:"Du khách muốn đi đâu?",opts:["Bảo tàng","Công viên","Nhà hàng"],a:0,ex:"'How to get to the museum?'"},{q:"Ở góc thứ hai phải làm gì?",opts:["Rẽ phải","Rẽ trái","Đi thẳng"],a:1,ex:"'Turn left at the second corner.'"},{q:"Bảo tàng ở vị trí nào?",opts:["Bên phải công viên","Đối diện công viên","Cuối phố"],a:1,ex:"'Opposite the park.'"},{q:"Đi bộ đến bảo tàng mất khoảng bao lâu?",opts:["5 phút","10 phút","20 phút"],a:1,ex:"'About ten minutes on foot.'"},{q:"Sau góc thứ hai, phải đi thêm mấy khối nhà?",opts:["1","2","3"],a:1,ex:"'Walk two more blocks.'"}]},
+{id:6,title:"At the Restaurant",topic:"Đặt món ở nhà hàng",level:"B1",minutes:5,
+ vocab:[{w:"menu",ph:"/ˈmenjuː/",m:"thực đơn",ex:"Can I see the menu, please?"},{w:"recommend",ph:"/ˌrekəˈmend/",m:"gợi ý, khuyên dùng",ex:"What do you recommend?"},{w:"steak",ph:"/steɪk/",m:"bít tết",ex:"I would like a steak, well done."},{w:"dessert",ph:"/dɪˈzɜːt/",m:"món tráng miệng",ex:"What desserts do you have?"},{w:"bill",ph:"/bɪl/",m:"hóa đơn (nhà hàng)",ex:"Could we have the bill, please?"},{w:"delicious",ph:"/dɪˈlɪʃəs/",m:"ngon tuyệt",ex:"The food was absolutely delicious."}],
+ dialogue:[{sp:"Waiter",t:"Good evening! Do you have a reservation?"},{sp:"Diner",t:"No, we do not. A table for two, please."},{sp:"Waiter",t:"Certainly. Here are your menus. Can I get you started with drinks?"},{sp:"Diner",t:"Two glasses of water, please. What do you recommend?"},{sp:"Waiter",t:"Our grilled salmon is very popular today."},{sp:"Diner",t:"That sounds great. I will have the salmon, and my friend will take a steak."},{sp:"Waiter",t:"Excellent choice. Would you like any dessert after?"},{sp:"Diner",t:"Maybe later. The food was delicious, by the way."},{sp:"Waiter",t:"Thank you! I will bring the bill right away."}],
+ trans:["Chào buổi tối! Quý khách có đặt bàn trước không?","Không ạ. Cho chúng tôi một bàn cho hai người.","Dạ được ạ. Đây là thực đơn. Quý khách gọi đồ uống trước được không ạ?","Cho hai ly nước ạ. Anh gợi ý món gì ngon ạ?","Cá hồi nướng của chúng tôi rất được ưa chuộng hôm nay ạ.","Nghe tuyệt quá. Tôi lấy cá hồi, bạn tôi lấy bít tết.","Lựa chọn tuyệt vời ạ. Sau đó quý khách có muốn tráng miệng không?","Có thể lát nữa. Nhân tiện, đồ ăn ngon tuyệt.","Cảm ơn quý khách! Tôi sẽ mang hóa đơn đến ngay."],
+ quiz:[{q:"Hai khách có đặt bàn trước không?",opts:["Có","Không","Không nói"],a:1,ex:"'No, we do not.'"},{q:"Anh phục vụ gợi ý món gì?",opts:["Bít tết","Cá hồi nướng","Salad"],a:1,ex:"'Our grilled salmon is very popular.'"},{q:"Bạn của khách gọi món gì?",opts:["Cá hồi","Bít tết","Nước"],a:1,ex:"'My friend will take a steak.'"},{q:"Hai khách đặt bàn cho mấy người?",opts:["1 người","2 người","3 người"],a:1,ex:"'A table for two, please.'"},{q:"Khách có gọi tráng miệng ngay không?",opts:["Có gọi ngay","Để lát nữa","Không bao giờ"],a:1,ex:"'Maybe later.'"}]},
+{id:7,title:"A Job Interview",topic:"Phỏng vấn xin việc",level:"B1",minutes:5,
+ vocab:[{w:"experience",ph:"/ɪkˈspɪəriəns/",m:"kinh nghiệm",ex:"I have five years of experience."},{w:"strength",ph:"/streŋθ/",m:"điểm mạnh",ex:"My greatest strength is teamwork."},{w:"salary",ph:"/ˈsæləri/",m:"mức lương",ex:"What salary are you expecting?"},{w:"position",ph:"/pəˈzɪʃn/",m:"vị trí công việc",ex:"I am applying for the manager position."},{w:"available",ph:"/əˈveɪləbl/",m:"sẵn sàng làm việc",ex:"I am available to start next month."},{w:"skill",ph:"/skɪl/",m:"kỹ năng",ex:"I have strong communication skills."}],
+ dialogue:[{sp:"Interviewer",t:"Good morning. Please have a seat. Tell me about yourself."},{sp:"Candidate",t:"Thank you. I have five years of experience in marketing."},{sp:"Interviewer",t:"Impressive. What would you say is your biggest strength?"},{sp:"Candidate",t:"I am very organized and I work well under pressure."},{sp:"Interviewer",t:"Why do you want this position at our company?"},{sp:"Candidate",t:"I admire your products and I want to help the company grow."},{sp:"Interviewer",t:"Great. What salary are you expecting?"},{sp:"Candidate",t:"Around three thousand dollars a month, negotiable."},{sp:"Interviewer",t:"Fair enough. When would you be available to start?"},{sp:"Candidate",t:"I can start as soon as next month."}],
+ trans:["Chào buổi sáng. Mời bạn ngồi. Kể tôi nghe về bản thân bạn nhé.","Cảm ơn ạ. Tôi có năm năm kinh nghiệm trong lĩnh vực marketing.","Tuyệt vời. Bạn cho rằng điểm mạnh lớn nhất của mình là gì?","Tôi rất ngăn nắp và làm việc tốt dưới áp lực.","Tại sao bạn muốn ứng tuyển vị trí này tại công ty chúng tôi?","Tôi ngưỡng mộ sản phẩm của công ty và muốn giúp công ty phát triển.","Tốt. Bạn mong muốn mức lương bao nhiêu?","Khoảng ba nghìn đô một tháng, có thể thương lượng ạ.","Hợp lý. Bạn có thể bắt đầu khi nào?","Tôi có thể bắt đầu sớm nhất là tháng sau."],
+ quiz:[{q:"Ứng viên có bao nhiêu năm kinh nghiệm?",opts:["3 năm","5 năm","7 năm"],a:1,ex:"'Five years of experience.'"},{q:"Điểm mạnh của ứng viên?",opts:["Làm việc nhóm tốt","Ngăn nắp và chịu áp lực","Giỏi ngoại ngữ"],a:1,ex:"'Very organized and work well under pressure.'"},{q:"Mức lương mong muốn?",opts:["$2,000","$3,000","$5,000"],a:1,ex:"'Around three thousand dollars a month.'"},{q:"Ứng viên có kinh nghiệm ngành gì?",opts:["Marketing","Kỹ thuật","Tài chính"],a:0,ex:"'Five years of experience in marketing.'"},{q:"Ứng viên có thể bắt đầu sớm nhất khi nào?",opts:["Ngay lập tức","Tháng sau","6 tháng nữa"],a:1,ex:"'As soon as next month.'"}]},
+{id:8,title:"Talking About Hobbies",topic:"Nói về sở thích",level:"B1",minutes:4,
+ vocab:[{w:"hobby",ph:"/ˈhɒbi/",m:"sở thích",ex:"My hobby is playing the guitar."},{w:"spare time",ph:"/speə taɪm/",m:"thời gian rảnh",ex:"In my spare time I read books."},{w:"photography",ph:"/fəˈtɒɡrəfi/",m:"chụp ảnh",ex:"Photography is my passion."},{w:"used to",ph:"/juːst tuː/",m:"từng (thói quen quá khứ)",ex:"I used to play football every week."},{w:"take up",ph:"/teɪk ʌp/",m:"bắt đầu (sở thích mới)",ex:"I want to take up painting."},{w:"relax",ph:"/rɪˈlæks/",m:"thư giãn",ex:"Listening to music helps me relax."}],
+ dialogue:[{sp:"Emma",t:"So, what do you like doing in your spare time?"},{sp:"David",t:"I love photography. I take my camera everywhere."},{sp:"Emma",t:"That is fascinating! How long have you been doing it?"},{sp:"David",t:"For about three years. I used to play football instead."},{sp:"Emma",t:"I used to dance, but I stopped. Now I read a lot."},{sp:"David",t:"Reading is a great way to relax after work."},{sp:"Emma",t:"Absolutely. Do you think I should take up photography too?"},{sp:"David",t:"Definitely! We could go out and shoot together sometime."}],
+ trans:["Vậy, bạn thích làm gì trong thời gian rảnh?","Tôi yêu chụp ảnh. Tôi mang máy ảnh đi khắp nơi.","Thú vị quá! Bạn làm điều đó được bao lâu rồi?","Khoảng ba năm. Trước đây tôi từng chơi đá bóng.","Tôi từng khiêu vũ, nhưng đã bỏ. Giờ tôi đọc sách nhiều.","Đọc sách là cách thư giãn tuyệt vời sau giờ làm.","Chắc chắn rồi. Bạn nghĩ tôi có nên bắt đầu chụp ảnh không?","Chắc chắn rồi! Lúc nào đó chúng ta có thể đi chụp cùng nhau."],
+ quiz:[{q:"Sở thích của David là gì?",opts:["Đá bóng","Chụp ảnh","Khiêu vũ"],a:1,ex:"'I love photography.'"},{q:"David chụp ảnh được bao lâu?",opts:["1 năm","2 năm","3 năm"],a:2,ex:"'For about three years.'"},{q:"Emma hiện tại thích làm gì?",opts:["Khiêu vũ","Đọc sách","Chơi đá bóng"],a:1,ex:"'Now I read a lot.'"},{q:"David trước đây thích làm gì?",opts:["Chụp ảnh","Đá bóng","Khiêu vũ"],a:1,ex:"'I used to play football instead.'"},{q:"David đề nghị làm gì cùng Emma?",opts:["Đi chụp ảnh","Đi đá bóng","Đi khiêu vũ"],a:0,ex:"'We could go out and shoot together sometime.'"}]},
+{id:9,title:"Discussing a Work Project",topic:"Thảo luận dự án công việc",level:"B2",minutes:6,
+ vocab:[{w:"deadline",ph:"/ˈdedlaɪn/",m:"hạn chót",ex:"We must meet the deadline next Friday."},{w:"budget",ph:"/ˈbʌdʒɪt/",m:"ngân sách",ex:"The project is over budget."},{w:"stakeholder",ph:"/ˈsteɪkhəʊldə/",m:"bên liên quan",ex:"We need to update the stakeholders."},{w:"milestone",ph:"/ˈmaɪlstəʊn/",m:"cột mốc",ex:"We reached an important milestone."},{w:"delay",ph:"/dɪˈleɪ/",m:"trì hoãn, chậm trễ",ex:"There will be a two-week delay."},{w:"prioritize",ph:"/praɪˈɒrətaɪz/",m:"ưu tiên",ex:"We need to prioritize the key tasks."}],
+ dialogue:[{sp:"Manager",t:"Let us go over the progress on the new product launch."},{sp:"Team Lead",t:"We have hit our first milestone, but we are slightly behind schedule."},{sp:"Manager",t:"How much of a delay are we looking at?"},{sp:"Team Lead",t:"About two weeks, mainly due to budget constraints."},{sp:"Manager",t:"That is concerning. Have we informed the stakeholders?"},{sp:"Team Lead",t:"Not yet. We wanted to propose a solution first."},{sp:"Manager",t:"What do you suggest? We cannot miss the launch deadline."},{sp:"Team Lead",t:"I suggest we prioritize the core features and cut the optional ones."},{sp:"Manager",t:"That makes sense. Let us present this plan to the client tomorrow."}],
+ trans:["Chúng ta cùng xem xét tiến độ ra mắt sản phẩm mới nhé.","Chúng tôi đã đạt cột mốc đầu tiên, nhưng hơi chậm so với kế hoạch.","Chậm trễ khoảng bao lâu?","Khoảng hai tuần, chủ yếu do hạn chế ngân sách.","Điều đó đáng lo ngại. Chúng ta đã thông báo cho các bên liên quan chưa?","Chưa ạ. Chúng tôi muốn đề xuất giải pháp trước.","Bạn đề xuất gì? Chúng ta không thể lỡ hạn chót ra mắt được.","Tôi đề xuất chúng ta ưu tiên các tính năng cốt lõi và cắt bỏ tính năng tùy chọn.","Hợp lý. Ngày mai chúng ta trình bày kế hoạch này cho khách hàng."],
+ quiz:[{q:"Đội ngũ đã đạt được gì?",opts:["Ra mắt sản phẩm","Cột mốc đầu tiên","Phê duyệt ngân sách"],a:1,ex:"'We have hit our first milestone.'"},{q:"Trì hoãn khoảng bao lâu?",opts:["1 tuần","2 tuần","1 tháng"],a:1,ex:"'About two weeks.'"},{q:"Đề xuất của Team Lead là gì?",opts:["Tăng ngân sách","Ưu tiên tính năng cốt lõi","Hoãn ra mắt"],a:1,ex:"'Prioritize the core features.'"},{q:"Sự trì hoãn chủ yếu do nguyên nhân gì?",opts:["Thiếu nhân sự","Hạn chế ngân sách","Khách hàng thay đổi"],a:1,ex:"'Mainly due to budget constraints.'"},{q:"Họ sẽ trình bày kế hoạch cho ai vào ngày mai?",opts:["Ban giám đốc","Khách hàng","Các bên liên quan"],a:1,ex:"'Let us present this plan to the client tomorrow.'"}]},
+{id:10,title:"Making a Complaint",topic:"Khiếu nại và giải quyết vấn đề",level:"B2",minutes:5,
+ vocab:[{w:"complain",ph:"/kəmˈpleɪn/",m:"khiếu nại",ex:"I want to complain about my room."},{w:"faulty",ph:"/ˈfɔːlti/",m:"có lỗi, hỏng",ex:"The product is faulty."},{w:"refund",ph:"/ˈriːfʌnd/",m:"hoàn tiền",ex:"I would like a full refund."},{w:"apologize",ph:"/əˈpɒlədʒaɪz/",m:"xin lỗi",ex:"We sincerely apologize for the inconvenience."},{w:"compensation",ph:"/ˌkɒmpenˈseɪʃn/",m:"bồi thường",ex:"We will offer you compensation."},{w:"resolve",ph:"/rɪˈzɒlv/",m:"giải quyết (vấn đề)",ex:"We will resolve this immediately."}],
+ dialogue:[{sp:"Guest",t:"I am calling to complain about my hotel room. The air conditioning is faulty."},{sp:"Manager",t:"I sincerely apologize. We will send a technician right away."},{sp:"Guest",t:"That is not good enough. I have already waited two hours."},{sp:"Manager",t:"I understand your frustration. Would a room upgrade help?"},{sp:"Guest",t:"I would prefer a full refund for last night."},{sp:"Manager",t:"I can offer you a fifty percent refund plus a free dinner."},{sp:"Guest",t:"Hmm, that sounds reasonable. Can you resolve this today?"},{sp:"Manager",t:"Absolutely. I will personally ensure it is sorted out within the hour."},{sp:"Guest",t:"Thank you. I appreciate your quick response."}],
+ trans:["Tôi gọi để khiếu nại về phòng khách sạn. Điều hòa bị hỏng.","Tôi thành thật xin lỗi. Chúng tôi sẽ gửi kỹ thuật viên ngay lập tức.","Vậy là chưa đủ. Tôi đã đợi hai tiếng rồi.","Tôi hiểu sự bực bội của anh. Một lần nâng cấp phòng có giúp được không?","Tôi thích được hoàn tiền đầy đủ cho đêm qua hơn.","Tôi có thể đề xuất hoàn 50% cộng với một bữa tối miễn phí.","Hừm, nghe hợp lý. Anh có thể giải quyết việc này hôm nay không?","Chắc chắn. Tôi sẽ tự đảm bảo việc được giải quyết trong vòng một giờ.","Cảm ơn anh. Tôi đánh giá cao phản ứng nhanh chóng của anh."],
+ quiz:[{q:"Vấn đề của khách là gì?",opts:["Phòng bẩn","Điều hòa hỏng","Ồn ào"],a:1,ex:"'The air conditioning is faulty.'"},{q:"Khách đợi bao lâu rồi?",opts:["1 giờ","2 giờ","3 giờ"],a:1,ex:"'I have already waited two hours.'"},{q:"Quản lý đề xuất gì?",opts:["Hoàn 100%","Hoàn 50% + bữa tối miễn phí","Đổi phòng"],a:1,ex:"'Fifty percent refund plus a free dinner.'"},{q:"Khách muốn hoàn tiền cho đêm nào?",opts:["Đêm nay","Đêm qua","Cả hai đêm"],a:1,ex:"'A full refund for last night.'"},{q:"Quản lý hứa giải quyết trong bao lâu?",opts:["30 phút","1 giờ","Hôm sau"],a:1,ex:"'Sorted out within the hour.'"}]},
+{id:11,title:"Climate Change — A Short Talk",topic:"Bài nói về biến đổi khí hậu",level:"C1",minutes:7,
+ vocab:[{w:"emissions",ph:"/ɪˈmɪʃnz/",m:"khí thải",ex:"Carbon emissions must be reduced."},{w:"sustainable",ph:"/səˈsteɪnəbl/",m:"bền vững",ex:"We need sustainable energy sources."},{w:"consequence",ph:"/ˈkɒnsɪkwəns/",m:"hậu quả",ex:"The consequences are already visible."},{w:"mitigate",ph:"/ˈmɪtɪɡeɪt/",m:"giảm thiểu",ex:"We must mitigate the effects of global warming."},{w:"renewable",ph:"/rɪˈnjuːəbl/",m:"tái tạo (năng lượng)",ex:"Renewable energy is the future."},{w:"urgent",ph:"/ˈɜːdʒənt/",m:"khẩn cấp",ex:"Climate action is extremely urgent."},{w:"adapt",ph:"/əˈdæpt/",m:"thích nghi",ex:"Cities must adapt to rising sea levels."}],
+ dialogue:[{sp:"Speaker",t:"Ladies and gentlemen, climate change is no longer a distant threat — it is here."},{sp:"Speaker",t:"Global carbon emissions have risen by fifty percent since 1990."},{sp:"Speaker",t:"The consequences are already visible: extreme weather, rising sea levels, and droughts."},{sp:"Speaker",t:"To mitigate this crisis, we must transition to renewable energy immediately."},{sp:"Speaker",t:"Sustainable practices in agriculture and transport are equally urgent."},{sp:"Speaker",t:"Developing nations need both financial support and technology to adapt."},{sp:"Speaker",t:"Individual choices matter, but systemic change is what will truly make a difference."},{sp:"Speaker",t:"Let us act today, not tomorrow, for the sake of future generations."}],
+ trans:["Kính thưa quý vị, biến đổi khí hậu không còn là mối đe dọa xa xôi — nó đã ở đây.","Khí thải carbon toàn cầu đã tăng năm mươi phần trăm kể từ năm 1990.","Hậu quả đã rõ ràng: thời tiết cực đoan, mực nước biển dâng và hạn hán.","Để giảm thiểu cuộc khủng hoảng này, chúng ta phải chuyển sang năng lượng tái tạo ngay lập tức.","Các thực hành bền vững trong nông nghiệp và giao thông cũng cấp thiết không kém.","Các quốc gia đang phát triển cần cả hỗ trợ tài chính lẫn công nghệ để thích nghi.","Lựa chọn cá nhân có ý nghĩa, nhưng thay đổi hệ thống mới thực sự tạo ra khác biệt.","Chúng ta hãy hành động hôm nay, chứ không phải ngày mai, vì các thế hệ tương lai."],
+ quiz:[{q:"Khí thải carbon tăng bao nhiêu kể từ 1990?",opts:["20%","35%","50%"],a:2,ex:"'Risen by fifty percent since 1990.'"},{q:"Để giảm thiểu khủng hoảng, cần chuyển sang gì?",opts:["Năng lượng hóa thạch","Năng lượng tái tạo","Năng lượng hạt nhân"],a:1,ex:"'Transition to renewable energy immediately.'"},{q:"Theo diễn giả, điều gì thực sự tạo ra khác biệt?",opts:["Lựa chọn cá nhân","Thay đổi hệ thống","Công nghệ"],a:1,ex:"'Systemic change is what will truly make a difference.'"},{q:"Đâu KHÔNG phải hậu quả được nhắc đến?",opts:["Thời tiết cực đoan","Mực nước biển dâng","Động đất"],a:2,ex:"Các hậu quả được liệt kê: extreme weather, rising sea levels, droughts."},{q:"Các nước đang phát triển cần gì để thích nghi?",opts:["Chỉ tiền bạc","Cả tài chính lẫn công nghệ","Không cần gì"],a:1,ex:"'Need both financial support and technology to adapt.'"}]},
+{id:12,title:"Business Negotiation",topic:"Đàm phán kinh doanh",level:"C1",minutes:6,
+ vocab:[{w:"negotiate",ph:"/nɪˈɡəʊʃieɪt/",m:"đàm phán",ex:"We need to negotiate a better deal."},{w:"counteroffer",ph:"/ˈkaʊntərɒfə/",m:"phản đề xuất",ex:"They rejected our offer and made a counteroffer."},{w:"leverage",ph:"/ˈliːvərɪdʒ/",m:"thế mạnh đàm phán",ex:"We have strong leverage in these talks."},{w:"concession",ph:"/kənˈseʃn/",m:"sự nhượng bộ",ex:"We made a small concession on price."},{w:"mutual",ph:"/ˈmjuːtʃuəl/",m:"song phương, cùngbenefit",ex:"We reached a mutual agreement."},{w:"terms",ph:"/tɜːmz/",m:"điều khoản",ex:"Let us discuss the terms of the contract."},{w:"partnership",ph:"/ˈpɑːtnəʃɪp/",m:"quan hệ đối tác",ex:"A long-term partnership benefits both sides."}],
+ dialogue:[{sp:"Buyer",t:"We appreciate your proposal, but your price is ten percent above our budget."},{sp:"Seller",t:"I understand. However, our quality justifies a premium in this market."},{sp:"Buyer",t:"Perhaps, but we have received competing offers. What is your best price?"},{sp:"Seller",t:"If you commit to a two-year contract, we can offer a seven percent discount."},{sp:"Buyer",t:"That is a step forward, but we were hoping for fifteen percent."},{sp:"Seller",t:"Fifteen is not feasible. As a concession, we could include free maintenance."},{sp:"Buyer",t:"Free maintenance for two years plus a ten percent discount, and we have a deal."},{sp:"Seller",t:"Let us split the difference: twelve percent discount and one year of maintenance."},{sp:"Buyer",t:"Agreed. We look forward to a long and mutual partnership."}],
+ trans:["Chúng tôi đánh giá cao đề xuất của bạn, nhưng giá cao hơn mười phần trăm so với ngân sách.","Tôi hiểu. Tuy nhiên, chất lượng của chúng tôi biện minh cho mức giá cao hơn trên thị trường.","Có lẽ vậy, nhưng chúng tôi đã nhận được các đề xuất cạnh tranh. Giá tốt nhất của bạn là bao nhiêu?","Nếu quý vị cam kết hợp đồng hai năm, chúng tôi có thể giảm bảy phần trăm.","Đó là một bước tiến, nhưng chúng tôi hy vọng được mười lăm phần trăm.","Mười lăm là không khả thi. Như một sự nhượng bộ, chúng tôi có thể bao gồm bảo trì miễn phí.","Bảo trì miễn phí hai năm cộng giảm mười phần trăm, thì chúng ta đồng ý.","Chúng ta chia đôi: giảm mười hai phần trăm và bảo trì một năm.","Đồng ý. Chúng tôi mong chờ một mối quan hệ đối tác lâu dài và cùng có lợi."],
+ quiz:[{q:"Giá đề xuất ban đầu cao hơn ngân sách bao nhiêu?",opts:["5%","10%","15%"],a:1,ex:"'Ten percent above our budget.'"},{q:"Người bán đề xuất gì với hợp đồng 2 năm?",opts:["Giảm 7%","Giảm 15%","Bảo trì miễn phí vĩnh viễn"],a:0,ex:"'A seven percent discount.'"},{q:"Thỏa thuận cuối cùng là gì?",opts:["Giảm 12% + bảo trì 1 năm","Giảm 10% + bảo trì 2 năm","Giảm 15%"],a:0,ex:"'Twelve percent discount and one year of maintenance.'"},{q:"Mức giảm nào người bán nói là không khả thi?",opts:["7%","12%","15%"],a:2,ex:"'Fifteen is not feasible.'"},{q:"Thỏa thuận cuối gồm bảo trì mấy năm?",opts:["1 năm","2 năm","3 năm"],a:0,ex:"'One year of maintenance.'"}]},
+{id:13,title:"University Lecture: Marine Life",topic:"Bài giảng đại học về sinh học biển",level:"C1",minutes:8,
+ vocab:[{w:"biodiversity",ph:"/ˌbaɪəʊdaɪˈvɜːsəti/",m:"đa dạng sinh học",ex:"The ocean's biodiversity is astonishing."},{w:"ecosystem",ph:"/ˈiːkəʊsɪstəm/",m:"hệ sinh thái",ex:"Coral reefs are fragile ecosystems."},{w:"endangered",ph:"/ɪnˈdeɪndʒəd/",m:"có nguy cơ tuyệt chủng",ex:"Many species are now endangered."},{w:"habitat",ph:"/ˈhæbɪtæt/",m:"môi trường sống",ex:"Destruction of habitat threatens wildlife."},{w:"pollution",ph:"/pəˈluːʃn/",m:"ô nhiễm",ex:"Plastic pollution harms marine life."},{w:"sustainable",ph:"/səˈsteɪnəbl/",m:"bền vững",ex:"We need sustainable fishing practices."},{w:"extinction",ph:"/ɪkˈstɪŋkʃn/",m:"sự tuyệt chủng",ex:"Some species face extinction."},{w:"conservation",ph:"/ˌkɒnsəˈveɪʃn/",m:"bảo tồn",ex:"Conservation efforts have succeeded."}],
+ dialogue:[{sp:"Lecturer",t:"Good morning, everyone. Today we will explore the biodiversity of our oceans."},{sp:"Lecturer",t:"Oceans cover seventy percent of our planet, yet we have explored less than five percent."},{sp:"Lecturer",t:"Coral reefs, often called the rainforests of the sea, support a quarter of all marine species."},{sp:"Lecturer",t:"However, these fragile ecosystems are under severe threat from climate change and pollution."},{sp:"Lecturer",t:"Many species are now endangered, and some face extinction within our lifetime."},{sp:"Lecturer",t:"Habitat destruction, particularly through bottom trawling, destroys centuries-old reefs in minutes."},{sp:"Lecturer",t:"Conservation efforts have shown promising results in several marine protected areas."},{sp:"Lecturer",t:"Sustainable fishing practices are essential to allow fish populations to recover."},{sp:"Lecturer",t:"Individual actions, such as reducing plastic use, also contribute to ocean health."},{sp:"Lecturer",t:"Scientists estimate that protecting thirty percent of oceans could preserve most marine biodiversity."},{sp:"Lecturer",t:"The real question is whether governments and industries will act quickly enough."}],
+ trans:["Chào buổi sáng, thưa các bạn. Hôm nay chúng ta sẽ khám phá sự đa dạng sinh học của các đại dương.","Các đại dương bao phủ bảy mươi phần trăm hành tinh, nhưng chúng ta mới khám phá chưa đến năm phần trăm.","Rạn san hô, thường được gọi là rừng nhiệt đới dưới biển, nuôi dưỡng một phần tư tất cả các loài sinh vật biển.","Tuy nhiên, những hệ sinh thái mong manh này đang bị đe dọa nghiêm trọng bởi biến đổi khí hậu và ô nhiễm.","Nhiều loài hiện đang có nguy cơ tuyệt chủng, và một số loài đối mặt với sự tuyệt chủng trong vòng đời của chúng ta.","Phá hủy môi trường sống, đặc biệt là đánh bắt bằng lưới kéo đáy, phá hủy các rạn san hô hàng trăm năm chỉ trong vài phút.","Các nỗ lực bảo tồn đã cho kết quả khả quan ở một số khu vực bảo vệ biển.","Thực hành đánh bắt bền vững là điều cần thiết để quần thể cá phục hồi.","Hành động cá nhân, như giảm sử dụng nhựa, cũng góp phần vào sức khỏe đại dương.","Các nhà khoa học ước tính rằng bảo vệ ba mươi phần trăm đại dương có thể bảo tồn hầu hết đa dạng sinh học biển.","Câu hỏi thực sự là liệu các chính phủ và ngành công nghiệp có hành động đủ nhanh hay không."],
+ quiz:[{q:"Đại dương bao phủ bao nhiêu phần trăm hành tinh?",opts:["50%","60%","70%"],a:2,ex:"'Oceans cover seventy percent of our planet.'"},{q:"Rạn san hô hỗ trợ bao nhiêu phần trăm loài biển?",opts:["10%","25%","50%"],a:1,ex:"'A quarter of all marine species' = 25%."},{q:"Theo bài giảng, cần bảo vệ bao nhiêu % đại dương?",opts:["10%","20%","30%"],a:2,ex:"'Protecting thirty percent of oceans.'"},{q:"Con người mới khám phá được bao nhiêu % đại dương?",opts:["Dưới 5%","Khoảng 25%","Khoảng 50%"],a:0,ex:"'We have explored less than five percent.'"},{q:"Điều gì phá hủy rạn san hô hàng trăm năm chỉ trong vài phút?",opts:["Ô nhiễm nhựa","Đánh bắt lưới kéo đáy","Nước biển ấm lên"],a:1,ex:"'Bottom trawling destroys centuries-old reefs in minutes.'"}]},
+{id:14,title:"At the Doctor's Consultation",topic:"Khám bệnh và tư vấn chi tiết",level:"C1",minutes:7,
+ vocab:[{w:"symptom",ph:"/ˈsɪmptəm/",m:"triệu chứng",ex:"Describe your symptoms to the doctor."},{w:"prescription",ph:"/prɪˈskrɪpʃn/",m:"đơn thuốc",ex:"The doctor wrote a prescription."},{w:"diagnosis",ph:"/ˌdaɪəɡˈnəʊsɪs/",m:"chẩn đoán",ex:"The diagnosis was a mild infection."},{w:"chronic",ph:"/ˈkrɒnɪk/",m:"mãn tính",ex:"He suffers from chronic back pain."},{w:"allergy",ph:"/ˈælədʒi/",m:"dị ứng",ex:"I have an allergy to peanuts."},{w:"dosage",ph:"/ˈdəʊsɪdʒ/",m:"liều lượng",ex:"Follow the dosage on the label."},{w:"side effect",ph:"/saɪd ɪˈfekt/",m:"tác dụng phụ",ex:"Drowsiness is a common side effect."}],
+ dialogue:[{sp:"Doctor",t:"Good morning. What brings you in today?"},{sp:"Patient",t:"I have had a persistent headache and dizziness for over a week."},{sp:"Doctor",t:"I see. Are you experiencing any other symptoms, such as nausea?"},{sp:"Patient",t:"Sometimes I feel nauseous, and I have trouble sleeping at night."},{sp:"Doctor",t:"Do you have any known allergies or chronic conditions?"},{sp:"Patient",t:"I am allergic to penicillin, but I have no chronic illnesses."},{sp:"Doctor",t:"Based on my examination, my diagnosis is tension headache caused by stress."},{sp:"Patient",t:"Is that serious? Will I need medication?"},{sp:"Doctor",t:"I will write you a prescription. Take one tablet twice daily with food."},{sp:"Patient",t:"Are there any side effects I should be aware of?"},{sp:"Doctor",t:"Mild drowsiness is possible. If symptoms worsen, come back immediately."}],
+ trans:["Chào buổi sáng. Hôm nay anh đến vì lý do gì ạ?","Tôi bị đau đầu liên tục và chóng mặt đã hơn một tuần rồi ạ.","Tôi hiểu. Anh có gặp triệu chứng nào khác không, như buồn nôn?","Đôi khi tôi cảm thấy buồn nôn, và tôi khó ngủ vào ban đêm.","Anh có bị dị ứng gì hoặc bệnh mãn tính nào không?","Tôi bị dị ứng với penicillin, nhưng không có bệnh mãn tính nào.","Dựa trên khám lâm sàng, chẩn đoán của tôi là đau đầu do căng thẳng.","Bệnh có nghiêm trọng không ạ? Tôi có cần dùng thuốc không?","Tôi sẽ viết đơn thuốc cho anh. Uống một viên hai lần mỗi ngày sau bữa ăn.","Có tác dụng phụ nào tôi nên lưu ý không ạ?","Có thể gây buồn ngủ nhẹ. Nếu triệu chứng nặng hơn, hãy đến khám lại ngay."],
+ quiz:[{q:"Bệnh nhân bị đau đầu bao lâu rồi?",opts:["3 ngày","1 tuần","Hơn 1 tuần"],a:2,ex:"'For over a week' = hơn một tuần."},{q:"Bệnh nhân bị dị ứng với gì?",opts:["Penicillin","Aspirin","Hải sản"],a:0,ex:"'Allergic to penicillin.'"},{q:"Chẩn đoán của bác sĩ là gì?",opts:["Cúm","Đau đầu do căng thẳng","Thiếu máu"],a:1,ex:"'Tension headache caused by stress.'"},{q:"Thuốc uống liều lượng như thế nào?",opts:["1 viên 1 lần/ngày","1 viên 2 lần/ngày sau ăn","2 viên 3 lần/ngày"],a:1,ex:"'Take one tablet twice daily with food.'"},{q:"Tác dụng phụ có thể gặp là gì?",opts:["Buồn ngủ nhẹ","Phát ban","Đau bụng"],a:0,ex:"'Mild drowsiness is possible.'"}]},
+{id:15,title:"Startup Investment Pitch",topic:"Thuyết trình gây quỹ startup",level:"C1",minutes:8,
+ vocab:[{w:"revenue",ph:"/ˈrevənjuː/",m:"doanh thu",ex:"Our revenue doubled this year."},{w:"investor",ph:"/ɪnˈvestə/",m:"nhà đầu tư",ex:"We are seeking new investors."},{w:"prototype",ph:"/ˈprəʊtətaɪp/",m:"mẫu thử",ex:"We launched our prototype last month."},{w:"scalable",ph:"/ˈskeɪləbl/",m:"có thể mở rộng",ex:"The business model is highly scalable."},{w:"market share",ph:"/ˈmɑːkɪt ʃeə/",m:"thị phần",ex:"We hold five percent market share."},{w:"monetize",ph:"/ˈmʌnɪtaɪz/",m:"kiếm tiền (từ sản phẩm)",ex:"We monetize through subscriptions."},{w:"valuation",ph:"/ˌvæljuˈeɪʃn/",m:"định giá công ty",ex:"The startup reached a ten-million valuation."},{w:"stake",ph:"/steɪk/",m:"cổ phần",ex:"Investors receive a ten percent stake."}],
+ dialogue:[{sp:"Founder",t:"Thank you for having me. Today I will present our solution to the food waste problem."},{sp:"Founder",t:"Our platform connects restaurants with surplus food to consumers at half price."},{sp:"Founder",t:"We launched our prototype six months ago and now have fifty thousand active users."},{sp:"Founder",t:"User engagement is exceptional — the average customer orders four times per month."},{sp:"Founder",t:"Our revenue has grown thirty percent month over month, and we reached profitability last quarter."},{sp:"Founder",t:"We currently hold five percent market share in this city, with plans to expand nationwide."},{sp:"Founder",t:"The business model is highly scalable and requires minimal additional infrastructure."},{sp:"Founder",t:"We monetize through a fifteen percent commission on every transaction."},{sp:"Founder",t:"With this investment, we project a valuation of twenty million dollars within two years."},{sp:"Founder",t:"We are seeking two million dollars in exchange for a ten percent stake in the company."},{sp:"Founder",t:"I believe this is the right moment to capture the market before competitors arrive."}],
+ trans:["Cảm ơn quý vị đã đón tiếp. Hôm nay tôi sẽ trình bày giải pháp của chúng tôi cho vấn đề lãng phí thực phẩm.","Nền tảng của chúng tôi kết nối nhà hàng có thực phẩm thừa với người tiêu dùng với giá giảm một nửa.","Chúng tôi ra mắt mẫu thử sáu tháng trước và hiện có năm mươi nghìn người dùng hoạt động.","Mức độ tương tác của người dùng rất đặc biệt — khách hàng trung bình đặt hàng bốn lần mỗi tháng.","Doanh thu của chúng tôi tăng ba mươi phần trăm mỗi tháng, và chúng tôi đã có lãi vào quý trước.","Hiện chúng tôi giữ năm phần trăm thị phần tại thành phố này, với kế hoạch mở rộng trên toàn quốc.","Mô hình kinh doanh có khả năng mở rộng cao và đòi hỏi ít cơ sở hạ tầng bổ sung.","Chúng tôi kiếm tiền qua hoa hồng mười lăm phần trăm trên mỗi giao dịch.","Với khoản đầu tư này, chúng tôi dự báo định giá hai mươi triệu đô trong vòng hai năm.","Chúng tôi đang tìm kiếm hai triệu đô để đổi lấy mười phần trăm cổ phần của công ty.","Tôi tin rằng đây là thời điểm thích hợp để chiếm lĩnh thị trường trước khi các đối thủ cạnh tranh đến."],
+ quiz:[{q:"Startup giải quyết vấn đề gì?",opts:["Lãng phí thực phẩm","Giao thông","Giáo dục"],a:0,ex:"'Solution to the food waste problem.'"},{q:"Hiện có bao nhiêu người dùng hoạt động?",opts:["15,000","50,000","150,000"],a:1,ex:"'Fifty thousand active users.'"},{q:"Họ tìm kiếm bao nhiêu đầu tư?",opts:["$1 triệu","$2 triệu","$5 triệu"],a:1,ex:"'Seeking two million dollars.'"},{q:"Startup kiếm tiền qua đâu?",opts:["Quảng cáo","Hoa hồng 15% mỗi giao dịch","Bán dữ liệu"],a:1,ex:"'Monetize through a fifteen percent commission.'"},{q:"Họ dự báo định giá công ty bao nhiêu trong 2 năm?",opts:["$2 triệu","$10 triệu","$20 triệu"],a:2,ex:"'A valuation of twenty million dollars within two years.'"}]},
+{id:16,title:"The Gold Coin — Mini Story",topic:"Truyện ngắn sâu — học trong 7 ngày",level:"C1",minutes:15,deep:true,
+ vocab:[{w:"merchant",ph:"/ˈmɜːtʃənt/",m:"thương nhân",ex:"A rich merchant lived in the village."},{w:"generous",ph:"/ˈdʒenərəs/",m:"hào phóng",ex:"She was generous to the poor."},{w:"greedy",ph:"/ˈɡriːdi/",m:"tham lam",ex:"The greedy man wanted more."},{w:"fortune",ph:"/ˈfɔːtʃuːn/",m:"gia tài, vận may",ex:"He lost his entire fortune."},{w:"discover",ph:"/dɪˈskʌvə/",m:"phát hiện ra",ex:"They discovered a hidden box."},{w:"pretend",ph:"/prɪˈtend/",m:"giả vờ",ex:"He pretended to be asleep."},{w:"reward",ph:"/rɪˈwɔːd/",m:"phần thưởng",ex:"Honesty brings its own reward."},{w:"honest",ph:"/ˈɒnɪst/",m:"trung thực",ex:"An honest person always tells the truth."},{w:"stranger",ph:"/ˈstreɪndʒə/",m:"người lạ",ex:"A stranger knocked on the door."},{w:"wisdom",ph:"/ˈwɪzdəm/",m:"sự khôn ngoan",ex:"The old man shared his wisdom."}],
+ dialogue:[{sp:"Narrator",t:"Once upon a time, a rich merchant lived in a small village by the sea."},{sp:"Narrator",t:"Although he was wealthy, he was known for being generous to everyone around him."},{sp:"Narrator",t:"One day, a stranger arrived at his door, tired and hungry from a long journey."},{sp:"Narrator",t:"The merchant invited him in, fed him well, and gave him a warm place to sleep."},{sp:"Narrator",t:"The next morning, the stranger thanked him and handed him a small wooden box."},{sp:"Narrator",t:"Inside the box, the merchant discovered a single gold coin, shining brightly."},{sp:"Narrator",t:"The stranger said, this coin will multiply, but only if you share it with others."},{sp:"Narrator",t:"The merchant was confused, but he decided to give the coin to a poor family."},{sp:"Narrator",t:"That very night, he found another gold coin under his pillow, warm to the touch."},{sp:"Narrator",t:"He gave that one away too, and again another appeared the next morning."},{sp:"Narrator",t:"News of the magic coin spread, and a greedy man from a nearby town heard about it."},{sp:"Narrator",t:"The greedy man stole the box, but when he opened it, it was completely empty."},{sp:"Narrator",t:"He pretended nothing had happened, but his guilt kept him awake every night."},{sp:"Narrator",t:"Eventually he returned the box, apologizing and asking for forgiveness."},{sp:"Narrator",t:"The merchant, being honest and kind, forgave him without any anger."},{sp:"Narrator",t:"The stranger returned years later, revealing he was a wise old teacher."},{sp:"Narrator",t:"He explained that true fortune comes not from gold, but from wisdom and generosity."},{sp:"Narrator",t:"The merchant lived a long and happy life, always sharing whatever he had."}],
+ trans:["Ngày xửa ngày xưa, một thương nhân giàu có sống trong một ngôi làng nhỏ bên bờ biển.","Mặc dù giàu có, ông nổi tiếng là người hào phóng với mọi người xung quanh.","Một ngày nọ, một người lạ đến cửa nhà ông, mệt mỏi và đói khát sau một chuyến đi dài.","Ông thương nhân mời người vào nhà, cho ăn no, và cho một chỗ ngủ ấm áp.","Sáng hôm sau, người lạ cảm ơn và trao cho ông một chiếc hộp gỗ nhỏ.","Bên trong hộp, ông phát hiện ra một đồng tiền vàng duy nhất, sáng lấp lánh.","Người lạ nói: đồng tiền này sẽ nhân lên, nhưng chỉ khi bạn chia sẻ nó với người khác.","Ông thương nhân bối rối, nhưng quyết định đưa đồng tiền đó cho một gia đình nghèo.","Đúng tối đó, ông tìm thấy một đồng tiền vàng khác dưới gối, vẫn còn ấm.","Ông lại đưa nó đi, và một đồng khác lại xuất hiện vào sáng hôm sau.","Tin về đồng tiền ma thuật lan rộng, và một người tham lam ở thị trấn gần đó nghe thấy.","Người tham lam lấy cắp chiếc hộp, nhưng khi mở ra, nó hoàn toàn trống rỗng.","Anh ta giả vờ không có gì xảy ra, nhưng cảm giác tội lỗi khiến anh mất ngủ mỗi đêm.","Cuối cùng anh ta trả lại hộp, xin lỗi và cầu xin sự tha thứ.","Ông thương nhân, với sự trung thực và nhân hậu, đã tha thứ mà không hề giận dữ.","Người lạ trở lại nhiều năm sau, tiết lộ mình là một vị thầy khôn ngoan.","Người giải thích rằng gia tài thực sự không đến từ vàng, mà từ sự khôn ngoan và hào phóng.","Ông thương nhân sống một cuộc đời dài và hạnh phúc, luôn chia sẻ mọi thứ mình có."],
+ quiz:[{q:"Ông thương nhân nổi tiếng về điều gì?",opts:["Giàu có keo kiệt","Hào phóng với mọi người","Thông minh lắm tiền"],a:1,ex:"'Known for being generous to everyone around him.'"},{q:"Đồng tiền vàng nhân lên khi nào?",opts:["Khi giấu kỹ","Khi chia sẻ với người khác","Khi cầu nguyện"],a:1,ex:"'Will multiply, but only if you share it with others.'"},{q:"Người tham lam mở hộp thấy gì?",opts:["Nhiều vàng","Hộp trống","Một bức thư"],a:1,ex:"'It was completely empty.'"},{q:"Ai đã lấy cắp chiếc hộp?",opts:["Người lạ","Người tham lam","Một đứa trẻ"],a:1,ex:"'A greedy man from a nearby town stole the box.'"},{q:"Người lạ thực sự là ai?",opts:["Một tên trộm","Một vị thầy khôn ngoan","Vua của ngôi làng"],a:1,ex:"'Revealing he was a wise old teacher.'"}]},
+{id:17,title:"The Power of Small Habits",topic:"Bài nói sâu về thói quen — 7 ngày",level:"C1",minutes:14,deep:true,
+ vocab:[{w:"habit",ph:"/ˈhæbɪt/",m:"thói quen",ex:"Small habits shape our lives."},{w:"compound",ph:"/ˈkɒmpaʊnd/",m:"tích lũy kép",ex:"Small gains compound over time."},{w:"identity",ph:"/aɪˈdentəti/",m:"bản sắc, tự nhận thức",ex:"Change your identity, not just your actions."},{w:"consistent",ph:"/kənˈsɪstənt/",m:"nhất quán",ex:"Consistent effort beats intense effort."},{w:"environment",ph:"/ɪnˈvaɪrənmənt/",m:"môi trường",ex:"Design your environment carefully."},{w:"motivation",ph:"/ˌməʊtɪˈveɪʃn/",m:"động lực",ex:"Motivation is unreliable."},{w:"discipline",ph:"/ˈdɪsəplɪn/",m:"kỷ luật",ex:"Discipline carries you when motivation fades."},{w:"progress",ph:"/ˈprəʊɡres/",m:"tiến bộ",ex:"Track your progress daily."},{w:"overcome",ph:"/ˌəʊvəˈkʌm/",m:"vượt qua",ex:"We can overcome any obstacle."},{w:"fulfillment",ph:"/fʊlˈfɪlmənt/",m:"sự mãn nguyện",ex:"Fulfillment comes from growth."}],
+ dialogue:[{sp:"Speaker",t:"Thank you for being here today. I want to talk about the power of small habits."},{sp:"Speaker",t:"Most people believe that success requires dramatic, life-changing moments."},{sp:"Speaker",t:"But research shows the opposite: tiny daily actions compound into extraordinary results."},{sp:"Speaker",t:"If you improve just one percent each day, you will be thirty-seven times better in a year."},{sp:"Speaker",t:"The problem is that small changes feel invisible in the short term."},{sp:"Speaker",t:"We expect instant results, and when we do not see them, we give up too soon."},{sp:"Speaker",t:"The key is to focus on identity, not just on the actions themselves."},{sp:"Speaker",t:"Instead of saying I want to run, say I am a runner. It changes everything."},{sp:"Speaker",t:"Your environment matters more than your motivation or your willpower."},{sp:"Speaker",t:"If you want to read more, put a book on your pillow every night."},{sp:"Speaker",t:"If you want to eat healthily, remove junk food from your kitchen entirely."},{sp:"Speaker",t:"Motivation comes and goes, but discipline carries you through the hard days."},{sp:"Speaker",t:"You do not need to be perfect. You only need to be consistent, day after day."},{sp:"Speaker",t:"Track your progress. A simple calendar with a mark each day works wonders."},{sp:"Speaker",t:"When you miss a day, never miss twice. That single rule will save you."},{sp:"Speaker",t:"Over time, these small habits shape who you become and what you achieve."},{sp:"Speaker",t:"Fulfillment does not come from reaching a goal. It comes from growing every day."},{sp:"Speaker",t:"So start today. Choose one tiny habit, and let it compound for the rest of your life."}],
+ trans:["Cảm ơn quý vị đã có mặt hôm nay. Tôi muốn nói về sức mạnh của những thói quen nhỏ.","Hầu hết mọi người tin rằng thành công đòi hỏi những khoảnh khắc thay đổi cuộc sống kịch tính.","Nhưng nghiên cứu cho thấy điều ngược lại: những hành động nhỏ hàng ngày tích lũy thành kết quả phi thường.","Nếu bạn cải thiện chỉ một phần trăm mỗi ngày, sau một năm bạn sẽ tốt hơn ba mươi bảy lần.","Vấn đề là những thay đổi nhỏ cảm thấy vô hình trong ngắn hạn.","Chúng ta mong đợi kết quả tức thì, và khi không thấy, chúng ta từ bỏ quá sớm.","Chìa khóa là tập trung vào bản sắc, không chỉ vào bản thân hành động.","Thay vì nói 'tôi muốn chạy bộ', hãy nói 'tôi là một người chạy bộ'. Nó thay đổi mọi thứ.","Môi trường của bạn quan trọng hơn động lực hay ý chí của bạn.","Nếu muốn đọc nhiều hơn, hãy đặt một cuốn sách trên gối mỗi đêm.","Nếu muốn ăn uống lành mạnh, hãy loại bỏ đồ ăn vặt hoàn toàn khỏi bếp.","Động lực đến và đi, nhưng kỷ luật đưa bạn vượt qua những ngày khó khăn.","Bạn không cần hoàn hảo. Bạn chỉ cần nhất quán, ngày này qua ngày khác.","Hãy theo dõi tiến độ. Một lịch đơn giản với dấu tích mỗi ngày có tác dụng kỳ diệu.","Khi bỏ lỡ một ngày, đừng bao giờ bỏ lỡ hai ngày liên tiếp. Quy tắc đó sẽ cứu bạn.","Theo thời gian, những thói quen nhỏ này định hình con người và thành tựu của bạn.","Sự mãn nguyện không đến từ việc đạt được mục tiêu. Nó đến từ việc trưởng thành mỗi ngày.","Vì vậy hãy bắt đầu hôm nay. Chọn một thói quen nhỏ, và để nó tích lũy suốt cuộc đời."],
+ quiz:[{q:"Cải thiện 1% mỗi ngày giúp tốt hơn bao nhiêu trong 1 năm?",opts:["12 lần","37 lần","100 lần"],a:1,ex:"'Thirty-seven times better in a year.'"},{q:"Theo diễn giả, điều gì quan trọng nhất?",opts:["Động lực","Ý chí","Môi trường"],a:2,ex:"'Your environment matters more than your motivation or willpower.'"},{q:"Quy tắc 'never miss twice' nghĩa là gì?",opts:["Không bao giờ bỏ lỡ","Bỏ lỡ 1 ngày thì đừng bỏ lỡ ngày tiếp theo","Luyện tập hai lần mỗi ngày"],a:1,ex:"'When you miss a day, never miss twice.'"},{q:"Nếu muốn đọc nhiều hơn, diễn giả khuyên nên làm gì?",opts:["Mua thật nhiều sách","Đặt sách trên gối mỗi đêm","Xem sách trên mạng"],a:1,ex:"'Put a book on your pillow every night.'"},{q:"Theo diễn giả, sự mãn nguyện đến từ đâu?",opts:["Đạt được mục tiêu","Trưởng thành mỗi ngày","Có nhiều tiền"],a:1,ex:"'Fulfillment comes from growing every day.'"}]},
+{id:18,title:"The Future of Artificial Intelligence",topic:"TED Talk về tương lai AI — C2",level:"C2",minutes:18,deep:true,
+ vocab:[{w:"ubiquitous",ph:"/juːˈbɪkwɪtəs/",m:"có mặt ở khắp mọi nơi",ex:"AI will soon become ubiquitous."},{w:"ethical",ph:"/ˈeθɪkl/",m:"về đạo đức",ex:"We face ethical questions about AI."},{w:"automate",ph:"/ˈɔːtəmeɪt/",m:"tự động hóa",ex:"Machines will automate routine tasks."},{w:"augment",ph:"/ɔːɡˈment/",m:"tăng cường, bổ trợ",ex:"AI will augment human creativity."},{w:"bias",ph:"/ˈbaɪəs/",m:"thiên vị, định kiến",ex:"Algorithms can carry hidden bias."},{w:"transparency",ph:"/trænsˈpærənsi/",m:"sự minh bạch",ex:"We demand transparency in AI systems."},{w:"workforce",ph:"/ˈwɜːkfɔːs/",m:"lực lượng lao động",ex:"The workforce must adapt to new tools."},{w:"displacement",ph:"/dɪsˈpleɪsmənt/",m:"sự dịch chuyển (việc làm)",ex:"Job displacement is a real concern."},{w:"regulation",ph:"/ˌreɡjuˈleɪʃn/",m:"quy định, pháp lý",ex:"Governments are drafting AI regulation."},{w:"singularity",ph:"/ˌsɪŋɡjuˈlærəti/",m:"điểm kỳ dị (trí tuệ siêu việt)",ex:"The singularity remains speculative."}],
+ dialogue:[{sp:"Speaker",t:"Good evening. Tonight I want to discuss a question that will define our century."},{sp:"Speaker",t:"Artificial intelligence is no longer science fiction — it is already reshaping our daily lives."},{sp:"Speaker",t:"Within a decade, intelligent systems will be ubiquitous in every home and workplace."},{sp:"Speaker",t:"They will automate routine tasks, augment our creativity, and accelerate scientific discovery."},{sp:"Speaker",t:"But this revolution raises profound ethical questions we cannot afford to ignore."},{sp:"Speaker",t:"Algorithms trained on biased data can amplify discrimination against vulnerable groups."},{sp:"Speaker",t:"Without transparency, we risk handing critical decisions to opaque, unaccountable machines."},{sp:"Speaker",t:"The workforce will face massive displacement, particularly in manufacturing and services."},{sp:"Speaker",t:"Yet history shows that technological revolutions ultimately create more jobs than they destroy."},{sp:"Speaker",t:"The key is education: we must teach children to collaborate with machines, not compete with them."},{sp:"Speaker",t:"Governments worldwide are drafting regulation, but progress remains slow and fragmented."},{sp:"Speaker",t:"Some visionaries warn of a technological singularity beyond human comprehension."},{sp:"Speaker",t:"Most experts, however, consider that scenario distant and highly speculative."},{sp:"Speaker",t:"The immediate challenge is ensuring that the benefits of AI are shared equitably across society."},{sp:"Speaker",t:"We must invest in retraining programs for workers whose jobs are most at risk."},{sp:"Speaker",t:"We must also establish global standards for safety, privacy, and accountability."},{sp:"Speaker",t:"AI itself is neither good nor evil — it is a tool, and its impact depends entirely on us."},{sp:"Speaker",t:"If we guide it wisely, it could unlock cures for diseases and solutions to climate change."},{sp:"Speaker",t:"If we act recklessly, it could deepen inequality and erode our fundamental freedoms."},{sp:"Speaker",t:"The choice is ours. Let us build a future where intelligence, artificial or human, serves all of humanity."}],
+ trans:["Chào buổi tối. Tối nay tôi muốn thảo luận một câu hỏi sẽ định nghĩa thế kỷ của chúng ta.","Trí tuệ nhân tạo không còn là khoa học viễn tưởng — nó đang định hình lại cuộc sống hàng ngày của chúng ta.","Trong vòng một thập kỷ, các hệ thống thông minh sẽ có mặt ở khắp mọi nhà và nơi làm việc.","Chúng sẽ tự động hóa các công việc thường nhật, tăng cường sáng tạo và đẩy nhanh khám phá khoa học.","Nhưng cuộc cách mạng này đặt ra những câu hỏi đạo đức sâu sắc mà chúng ta không thể phớt lờ.","Các thuật toán được huấn luyện trên dữ liệu thiên vị có thể khuếch đại sự phân biệt đối xử với nhóm yếu thế.","Nếu không có minh bạch, chúng ta nguy cơ giao các quyết định quan trọng cho cỗ máy mờ ám, không chịu trách nhiệm.","Lực lượng lao động sẽ đối mặt với sự dịch chuyển lớn, đặc biệt trong sản xuất và dịch vụ.","Tuy nhiên, lịch sử cho thấy các cuộc cách mạng công nghệ cuối cùng tạo ra nhiều việc làm hơn là phá hủy.","Chìa khóa là giáo dục: chúng ta phải dạy trẻ em hợp tác với máy móc, chứ không phải cạnh tranh với chúng.","Các chính phủ trên toàn thế giới đang soạn thảo quy định, nhưng tiến độ vẫn chậm và rời rạc.","Một số nhà tiên tri cảnh báo về một điểm kỳ dị công nghệ vượt ngoài sự thấu hiểu của con người.","Tuy nhiên, đa số chuyên gia coi kịch bản đó là xa vời và mang tính suy đoán cao.","Thách thức tức thời là đảm bảo lợi ích của AI được chia sẻ công bằng trên toàn xã hội.","Chúng ta phải đầu tư vào chương trình đào tạo lại cho người lao động có việc làm nguy cơ cao nhất.","Chúng ta cũng phải thiết lập các tiêu chuẩn toàn cầu về an toàn, quyền riêng tư và trách nhiệm giải trình.","Bản thân AI không tốt cũng không xấu — nó là một công cụ, và tác động của nó hoàn toàn phụ thuộc vào chúng ta.","Nếu chúng ta định hướng khôn ngoan, nó có thể mở ra phương pháp chữa bệnh và giải pháp cho biến đổi khí hậu.","Nếu chúng ta hành động liều lĩnh, nó có thể làm sâu sắc thêm bất bình đẳng và xói mòn các tự do cơ bản.","Sự lựa chọn thuộc về chúng ta. Hãy cùng xây dựng một tương lai nơi trí tuệ, nhân tạo hay con người, đều phục vụ toàn thể nhân loại."],
+ quiz:[{q:"Theo diễn giả, AI sẽ trở nên như thế nào trong vòng 1 thập kỷ?",opts:["Biến mất","Có mặt ở khắp nơi","Chỉ dùng trong quân sự"],a:1,ex:"'Will be ubiquitous in every home and workplace.'"},{q:"Điều gì có thể khuếch đại sự phân biệt đối xử?",opts:["Dữ liệu thiên vị trong thuật toán","Giáo dục công bằng","Quy định toàn cầu"],a:0,ex:"'Algorithms trained on biased data can amplify discrimination.'"},{q:"Theo diễn giả, bản thân AI là gì?",opts:["Tốt","Xấu","Một công cụ trung lập"],a:2,ex:"'AI itself is neither good nor evil — it is a tool.'"},{q:"Chìa khóa để thích ứng với AI là gì?",opts:["Cạnh tranh với máy móc","Giáo dục & hợp tác với máy móc","Bỏ việc làm"],a:1,ex:"'We must teach children to collaborate with machines, not compete with them.'"},{q:"Đa số chuyên gia nghĩ thế nào về điểm kỳ dị (singularity)?",opts:["Sắp xảy ra","Xa vời, mang tính suy đoán","Không thể xảy ra"],a:1,ex:"'Distant and highly speculative.'"}]},
+{id:19,title:"The Stoic Philosophy of Life",topic:"Triết lý Stoic — sống bình yên giữa biến động",level:"C2",minutes:16,deep:true,
+ vocab:[{w:"philosophy",ph:"/fɪˈlɒsəfi/",m:"triết học",ex:"Stoic philosophy offers practical wisdom."},{w:"virtue",ph:"/ˈvɜːtʃuː/",m:"đức tính, nhân đức",ex:"Virtue is the only true good."},{w:"resilience",ph:"/rɪˈzɪliəns/",m:"sự kiên cường",ex:"Stoicism builds emotional resilience."},{w:"perception",ph:"/pəˈsepʃn/",m:"sự nhận thức, cách nhìn",ex:"It is not events but our perception that disturbs us."},{w:"inevitable",ph:"/ɪnˈevɪtəbl/",m:"không thể tránh khỏi",ex:"Change is inevitable in life."},{w:"tranquility",ph:"/træŋˈkwɪləti/",m:"sự bình yên, tĩnh lặng",ex:"He sought inner tranquility."},{w:"adversity",ph:"/ədˈvɜːsəti/",m:"hoạn cảnh khó khăn",ex:"Adversity tests our character."},{w:"gratitude",ph:"/ˈɡrætɪtjuːd/",m:"lòng biết ơn",ex:"Practice gratitude every morning."},{w:"indifference",ph:"/ɪnˈdɪfrəns/",m:"sự thờ ơ (với vật ngoài)",ex:"Stoics practice indifference to wealth."},{w:"meditation",ph:"/ˌmedɪˈteɪʃn/",m:"sự chiêm nghiệm, thiền",ex:"Evening reflection is a form of meditation."}],
+ dialogue:[{sp:"Speaker",t:"Two thousand years ago, in the bustling streets of ancient Rome, a philosophy was born."},{sp:"Speaker",t:"Stoicism, as it came to be known, promised nothing less than inner tranquility."},{sp:"Speaker",t:"Its core insight is remarkably simple: we suffer not from events, but from our perception of them."},{sp:"Speaker",t:"The emperor Marcus Aurelius wrote that you have power over your mind, not outside events."},{sp:"Speaker",t:"This single idea, fully grasped, can transform the way we experience every hardship."},{sp:"Speaker",t:"Stoics divide life into two categories: things we control, and things we do not."},{sp:"Speaker",t:"Our thoughts, judgments, and actions lie firmly within our control."},{sp:"Speaker",t:"Wealth, reputation, health, and even the opinions of others do not."},{sp:"Speaker",t:"Wise people invest their energy only in the first category, and accept the rest with calm."},{sp:"Speaker",t:"This is not indifference or passivity — it is focused, deliberate action without attachment."},{sp:"Speaker",t:"Adversity, far from being an enemy, is the very fire that forges our character and virtue."},{sp:"Speaker",t:"Every obstacle, the Stoics taught, is an opportunity to practice courage and resilience."},{sp:"Speaker",t:"They practiced gratitude daily, reminding themselves that nothing in life is guaranteed."},{sp:"Speaker",t:"Each evening, they reflected on their mistakes and resolved to do better tomorrow."},{sp:"Speaker",t:"Change is inevitable, and clinging to what passes only brings unnecessary pain."},{sp:"Speaker",t:"Yet the present moment, fully embraced, is always enough and always within our reach."},{sp:"Speaker",t:"Modern psychology has confirmed what these ancient thinkers discovered long ago."},{sp:"Speaker",t:"People who focus on what they can control report far lower anxiety and greater life satisfaction."},{sp:"Speaker",t:"So today, when frustration arises, pause and ask: is this truly within my power to change?"},{sp:"Speaker",t:"If yes, act with courage. If no, accept with serenity. That is the Stoic path to a flourishing life."}],
+ trans:["Hai nghìn năm trước, trên những con phố nhộn nhịp của La Mã cổ đại, một triết lý đã ra đời.","Chủ nghĩa Khắc kỷ (Stoicism), như người ta gọi sau này, hứa hẹn không gì khác hơn là sự bình yên nội tâm.","Hiểu biết cốt lõi của nó đơn giản đáng ngạc nhiên: chúng ta đau khổ không vì sự kiện, mà vì cách chúng ta nhận thức về chúng.","Hoàng đế Marcus Aurelius viết rằng bạn có quyền làm chủ tâm trí mình, chứ không phải các sự kiện bên ngoài.","Chỉ riêng ý tưởng này, nếu thấu hiểu hoàn toàn, có thể biến đổi cách chúng ta trải qua mọi gian khó.","Người Khắc kỷ chia cuộc sống thành hai loại: những thứ ta kiểm soát được, và những thứ ta không kiểm soát được.","Suy nghĩ, phán đoán và hành động của ta nằm hoàn toàn trong tầm kiểm soát.","Còn của cải, danh tiếng, sức khỏe, và cả ý kiến của người khác thì không.","Người khôn ngoan chỉ dồn năng lượng vào loại thứ nhất, và chấp nhận phần còn lại với sự bình tĩnh.","Đây không phải là thờ ơ hay bị động — đó là hành động tập trung, có chủ đích mà không dính mắc.","Hoạn cảnh, xa gì kẻ thù, chính là ngọn lửa rèn luyện nhân cách và đức tính của chúng ta.","Mọi trở ngại, người Khắc kỷ dạy, đều là cơ hội để rèn luyện lòng dũng cảm và sự kiên cường.","Họ luyện tập lòng biết ơn mỗi ngày, nhắc nhở bản thân rằng không gì trong cuộc sống là được đảm bảo.","Mỗi buổi tối, họ chiêm nghiệm về sai lầm và quyết tâm làm tốt hơn vào ngày mai.","Thay đổi là không thể tránh khỏi, và việc níu giữ những thứ trôi qua chỉ mang lại nỗi đau không cần thiết.","Tuy nhiên, khoảnh khắc hiện tại, nếu ta trọn vẹn đón nhận, luôn là đủ và luôn nằm trong tầm với của ta.","Tâm lý học hiện đại đã xác nhận điều mà các nhà tư tưởng cổ đại này khám phá từ lâu.","Những người tập trung vào những gì mình kiểm soát được có mức lo âu thấp hơn nhiều và hài lòng với cuộc sống hơn.","Vì vậy hôm nay, khi sự bực bội nảy sinh, hãy dừng lại và hỏi: điều này thực sự nằm trong quyền lực của tôi để thay đổi không?","Nếu có, hãy hành động với can đảm. Nếu không, hãy chấp nhận với thanh thản. Đó là con đường Khắc kỷ hướng tới một cuộc sống viên mãn."],
+ quiz:[{q:"Theo Stoic, chúng ta đau khổ vì điều gì?",opts:["Bản thân sự kiện","Cách nhận thức của ta về sự kiện","Tiền bạc thiếu"],a:1,ex:"'We suffer not from events, but from our perception of them.'"},{q:"Điều gì nằm trong tầm kiểm soát của chúng ta?",opts:["Sức khỏe","Ý kiến người khác","Suy nghĩ và hành động của mình"],a:2,ex:"'Our thoughts, judgments, and actions lie within our control.'"},{q:"Theo Stoic, hoạn cảnh (adversity) là gì?",opts:["Kẻ thù cần tránh","Lửa rèn luyện nhân cách","Hình phạt từ trời"],a:1,ex:"'Adversity is the very fire that forges our character.'"},{q:"Người Khắc kỷ luyện tập gì mỗi ngày?",opts:["Thiền định","Lòng biết ơn","Tập thể dục"],a:1,ex:"'They practiced gratitude daily.'"},{q:"Theo Stoic, điều gì luôn nằm trong tầm với của ta?",opts:["Tiền bạc","Khoảnh khắc hiện tại","Danh tiếng"],a:1,ex:"'The present moment... is always enough and always within our reach.'"}]}
+
+
+
+];
+
+/* ==================== STATE ==================== */
+var S = {
+  view:'learn', lessonId:null, step:1, filter:'ALL',
+  vocabIdx:0, flipped:false, answers:{}, quizSubmitted:false,
+  speed:0.8, voiceURI:null, showTrans:false, dark:false,
+  playing:false, playIdx:-1, playTimer:null, search:'', listenOnly:false,
+  dictIdx:0, dictResults:[], recording:false, recBlob:null, recUrl:null,
+  progress: JSON.parse(localStorage.getItem('mochi_prog')||'{}'),
+  known: JSON.parse(localStorage.getItem('mochi_known')||'{}'),
+  streak: JSON.parse(localStorage.getItem('mochi_streak')||'{"count":0,"last":""}'),
+  history: JSON.parse(localStorage.getItem('mochi_history')||'{}'), repeatCount:1,
+  srs: JSON.parse(localStorage.getItem('mochi_srs')||'{}'), reminderOn:false, reminderHour:'20:00', accent:'US', personaVoice:true, personaContext:true, personaEmotion:true, remindedToday:'', dictMode:'full', reviewMode:false, reviewList:[], reviewIdx:0,
+};
+function save(){ localStorage.setItem('mochi_prog',JSON.stringify(S.progress)); localStorage.setItem('mochi_known',JSON.stringify(S.known)); localStorage.setItem('mochi_streak',JSON.stringify(S.streak)); localStorage.setItem('mochi_history',JSON.stringify(S.history)); localStorage.setItem('mochi_srs',JSON.stringify(S.srs)); }
+function saveSettings(){var o={};['personaVoice','personaContext','personaEmotion','accent','speed','voiceURI','dark','reminderOn','reminderHour','dictMode','repeatCount','showTrans','listenOnly'].forEach(function(k){o[k]=S[k];});try{localStorage.setItem('mochi_settings',JSON.stringify(o));}catch(e){}}
+try{var _ms=JSON.parse(localStorage.getItem('mochi_settings')||'{}');for(var _mk in _ms){S[_mk]=_ms[_mk];}}catch(e){}
+function prog(id){ return S.progress[id]||{s1:false,s2:null,s3:false,s4:false}; }
+function isDone(id){ var p=prog(id); return !!(p.s1&&p.s2!==null&&p.s3&&p.s4); }
+var SRS_DAYS=[0,1,3,7,14,30];
+function srsDue(){ var now=Date.now(), due=[]; for(var k in S.srs){ if(S.srs[k] && S.srs[k].next<=now) due.push(k); } return due; }
+function srsAdd(key){ if(!S.srs[key]){ S.srs[key]={box:1,next:Date.now()+86400000}; save(); } }
+function srsReview(key, known){ var b=(S.srs[key]&&S.srs[key].box)||0; if(known){ b=Math.min(b+1,5); } else { b=1; } S.srs[key]={box:b,next:Date.now()+SRS_DAYS[b]*86400000}; save(); }
+function wordByKey(key){ var parts=key.split(':'), lid=parseInt(parts[0]); var l=LESSONS.find(function(x){return x.id===lid;}); if(!l) return null; return l.vocab.find(function(v){return (l.id+':'+v.w)===key;}); }
+var STOPWORDS=['the','a','an','is','are','was','were','and','or','but','of','to','in','on','at','for','with','as','by','it','its','this','that','these','those','i','you','he','she','we','they','my','your','his','her','our','their','be','been','being','have','has','had','do','does','did','will','would','can','could','should','not','no','so','if','then','than','from','into','about','what','when','where','who','how','which'];
+function pickGapWord(sent){ var words=sent.replace(/[.,!?;:'"]/g,'').split(/\s+/).filter(function(w){return w.length>=4 && STOPWORDS.indexOf(w.toLowerCase())===-1;}); if(!words.length) return null; return words[sent.length % words.length]; }
+function cur(){ return LESSONS.find(function(l){return l.id===S.lessonId;}); }
+function levelGroup(lv){ return lv.charAt(0); }
+
+/* ==================== SPEECH ==================== */
+var voices=[];
+function loadVoices(){ if('speechSynthesis' in window){ voices=speechSynthesis.getVoices(); } }
+if('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged=function(){ loadVoices(); populateVoiceSelect(); }; }
+function pickVoice(){
+  if(S.voiceURI){ var v=voices.find(function(x){return x.voiceURI===S.voiceURI;}); if(v) return v; }
+  return voices.find(function(v){return /en[-_](US|GB)/i.test(v.lang);})||voices.find(function(v){return /^en/i.test(v.lang);})||null;
+}
+function stopSpeak(){
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(S.playTimer){ clearTimeout(S.playTimer); S.playTimer=null; }
+  S.playing=false; S.playIdx=-1;
+}
+/* ===== 8 loại giọng nhân vật: ông già / bà già / nam / nữ / trai trẻ / gái trẻ / bé trai / bé gái ===== */
+var PERSONAS={
+  elder_male:{label:'Ông già',pitch:0.45,rateMul:0.78,color:'#e2e8f0',female:false},
+  elder_female:{label:'Bà già',pitch:0.70,rateMul:0.82,color:'#f1e5ff',female:true},
+  adult_male:{label:'Nam',pitch:0.65,rateMul:1,color:'#dbeafe',female:false},
+  adult_female:{label:'Nữ',pitch:1.45,rateMul:1,color:'#fce7f3',female:true},
+  young_male:{label:'Trai trẻ',pitch:0.95,rateMul:1.05,color:'#cffafe',female:false},
+  young_female:{label:'Gái trẻ',pitch:1.70,rateMul:1.05,color:'#fbcfe8',female:true},
+  boy:{label:'Bé trai',pitch:1.90,rateMul:1.10,color:'#fef3c7',female:false},
+  girl:{label:'Bé gái',pitch:2.00,rateMul:1.10,color:'#fde68a',female:true},
+  narrator:{label:'Diễn giả',pitch:1,rateMul:0.95,color:'#e9d5ff',female:false}
+};
+var FEMALE_NAMES=/\b(woman|lady|female|mrs|ms|miss|mom|mother|mum|grandma|grandmother|granny|nana|aunt|sister|daughter|wife|girl|waitress|receptionist|nurse|hostess|stewardess|actress|queen|princess|madam|anna|emma|lisa|sarah|mary|linda|susan|kate|jane|helen|jennifer|margaret|nancy|karen|betty|sandra|donna|carol|ruth|sharon|michelle|laura|kimberly|deborah|jessica|shirley|cynthia|angela|melissa|brenda|amy|rebecca|virginia|kathleen|pamela|martha|debbie|stephanie|lily|lucy|rachel|hannah|olivia|sophia|ava|isabella|mia|charlotte|amelia|harper|evelyn|abigail|emily|elizabeth|sofia|madison|avery|ella|scarlett|grace|chloe|victoria|zoe|penelope|lillian|addison|natalie|leah|hazel|violet|aurora|savannah|audrey|brooklyn|bella|claire|skylar|paisley|everly|caroline|nova|aria|athena|naomi|elena|maya|willow|freya|sophie|clara|rose|daisy|poppy|ivy|iris|luna|stella)\b/i;
+var MALE_NAMES=/\b(man|male|mr|mister|dad|father|grandpa|grandfather|granddad|uncle|brother|son|boy|waiter|barista|john|tom|thomas|mark|david|mike|michael|paul|peter|james|robert|richard|charles|daniel|matthew|anthony|donald|steven|andrew|joshua|kenneth|kevin|brian|george|edward|ronald|timothy|jason|jeffrey|ryan|jacob|gary|nicholas|eric|jonathan|stephen|larry|justin|scott|brandon|benjamin|samuel|frank|gregory|raymond|alexander|patrick|jack|dennis|jerry|tyler|aaron|jose|adam|nathan|henry|douglas|zachary|kyle|walter|ethan|jeremy|harold|keith|christian|roger|noah|liam|oliver|elijah|william|lucas|theodore|sebastian|aiden|joseph|carter|owen|wyatt|dylan|luke|grayson|levi|isaac|gabriel|julian|mateo|jaxon|lincoln|christopher|caleb|adrian|miles|eli|leo|jameson|isaiah|charles|ezra|angel|cameron|maverick|colton|xavier|jace|silas|easton|cooper|kayden|parker|weston|sawyer|declan|emmett|preston|bryson|damian|greyson|ryker|rowan|braxton|grant|brody|asher|nolan|river|jude|hudson|logan|andre|dakota|malachi|gavin|tucker|beau|ryder|dean|hayden|jesus|bryan|cole|zane|max|rhys|kingston|kameron|tristan|roman|amir|nasir|landon|reid|spencer|myles|porter|chase|felix|victor|finn|everett|jayce|lance|tate|tyson|zayne|shaun|alex|drew|chandler|jamie|casey|jesse|reed|orion|kian|brooks|lane|dante|finnegan|robin|clark|louie|oscar|rory|troy|vance|wesley|brock|cyrus|diego|edison|gideon|hugo|ian|joel|knox|milo|nash|otto|quinn|rafe|theo|vincent|wade|xander|yusuf|arthur|archie|freddie|billy|tommy|danny|randy|andy|marty|nick|rick|steve|tony|dave|dan|matt|fred|harry|jimmy|joey|johnny|kenny|mickey|ricky|robbie|sammy|scotty|terry|timmy|vinnie|wally|woody|zack)\b/i;
+function detectGender(sp){var s=(sp||'').toLowerCase();if(FEMALE_NAMES.test(s))return'f';if(MALE_NAMES.test(s))return'm';return null;}
+function detectAge(sp){var s=(sp||'').toLowerCase();if(/\b(grandpa|grandfather|granddad|gramps|grandma|grandmother|granny|nana|old man|old woman|elder|senior|uncle|aunt)\b/.test(s))return'elder';if(/\b(kid|child|boy|girl|son|daughter|baby|teen|little|schoolboy|schoolgirl|toddler|infant)\b/.test(s))return'child';if(/\b(student|teenager|young man|young lady|intern|trainee|youth)\b/.test(s))return'young';return'adult';}
+function ageGenderKey(a,g,alt){if(a==='elder')return g==='f'?'elder_female':(g==='m'?'elder_male':(alt%2?'elder_female':'elder_male'));if(a==='child')return g==='f'?'girl':(g==='m'?'boy':(alt%2?'girl':'boy'));if(a==='young')return g==='f'?'young_female':(g==='m'?'young_male':(alt%2?'young_female':'young_male'));return g==='f'?'adult_female':(g==='m'?'adult_male':(alt%2?'adult_female':'adult_male'));}
+var _profileCache={};
+function speakerProfiles(lesson){if(!lesson)return{};if(_profileCache[lesson.id])return _profileCache[lesson.id];var prof={},alt=0;lesson.dialogue.forEach(function(d){if(prof[d.sp]!==undefined)return;var allSame=lesson.dialogue.every(function(x){return x.sp===d.sp;});var key;if(allSame&&/narrator|speaker|lecturer|founder/i.test(d.sp))key='narrator';else{key=ageGenderKey(detectAge(d.sp),detectGender(d.sp),alt);alt++;}prof[d.sp]=key;});_profileCache[lesson.id]=prof;return prof;}
+function personaOf(sp,lesson){
+  var key;
+  if(S.personaContext&&lesson){var prof=speakerProfiles(lesson);key=prof[sp]||'adult_male';}
+  else{key=ageGenderKey(detectAge(sp),detectGender(sp),0);}
+  return PERSONAS[key]||PERSONAS.adult_male;
+}
+/* Ngữ điệu cảm xúc theo nội dung câu (hào hứng / ngỏ thắc / trầm ngâm / lịch sự / căng thẳng / khẽ / buồn) */
+function emotionOf(text){var t=(text||''),r={pitchAdj:0,rateAdj:0,volume:1,tag:''};if(/!\s*$/.test(t)){r.pitchAdj+=0.12;r.rateAdj+=0.05;r.tag='hào hứng';}else if(/\?\s*$/.test(t)){r.pitchAdj+=0.07;r.tag='ngỏ thắc';}if(/\.\.\.|—\s*$|^\s*(hmm|well|uh|um|er)\b/i.test(t)){r.rateAdj-=0.12;r.pitchAdj-=0.04;if(!r.tag)r.tag='trầm ngâm';}if(/\b(shout|yell|angry|furious|complain|frustrat|insist|demand)\b/i.test(t)){r.volume=1;r.pitchAdj+=0.1;r.rateAdj+=0.03;r.tag='căng thẳng';}else if(/\b(whisper|quiet|soft|secret|silent)\b/i.test(t)){r.volume=0.6;r.rateAdj-=0.1;r.tag='khẽ';}if(/\b(sad|cry|tears|lonely|miss you|unfortunate)\b/i.test(t)){r.rateAdj-=0.08;r.pitchAdj-=0.1;r.tag='buồn';}if(!r.tag&&/\b(please|sorry|excuse me|thank|apolog|kindly|may i|could you|would you|pardon)\b/i.test(t)){r.rateAdj-=0.03;r.tag='lịch sự';}return r;}
+function emotionBadge(text){if(!S.personaEmotion)return'';var e=emotionOf(text);if(!e.tag)return'';return'<span class="persona-pill" style="background:rgba(128,128,128,.14);color:var(--muted)">~'+e.tag+'</span>';}
+function speakPersonaDemo(key){var p=PERSONAS[key]||PERSONAS.adult_male;if(!('speechSynthesis' in window))return;try{speechSynthesis.cancel();}catch(e){}var u=new SpeechSynthesisUtterance('Hello! This is how my voice sounds. Nice to meet you. How are you today?');u.pitch=p.pitch;u.rate=p.rateMul;u.volume=1;u.lang=(S.accent==='US'?'en-US':'en-GB');var v=chooseVoice(p.female);if(v)u.voice=v;speechSynthesis.speak(u);}
+function chooseVoice(preferFemale){
+  var vs=speechSynthesis.getVoices().filter(function(v){return v.lang.indexOf(S.accent==='US'?'en-US':'en-GB')===0;});
+  if(!vs.length) vs=speechSynthesis.getVoices().filter(function(v){return v.lang.indexOf('en')===0;});
+  if(!vs.length) return null;
+  if(preferFemale){ var f=vs.find(function(v){return /female|woman|samantha|victoria|karen|moira|tessa|fiona|susan|zira|google uk english female|google us english/i.test(v.name);}); if(f) return f; }
+  else { var m=vs.find(function(v){return /\bmale\b|daniel|alex|fred|david|mark|george|google uk english male/i.test(v.name);}); if(m) return m; }
+  return vs[0];
+}
+function speakAs(text, speaker, rate, onend, lesson){
+  if(!('speechSynthesis' in window)){ if(onend) setTimeout(onend,800); return; }
+  stopAudioOnly();
+  var u=new SpeechSynthesisUtterance(text);
+  var p=S.personaVoice?personaOf(speaker, lesson):{pitch:1, rateMul:1, female:false};
+  var emo=(S.personaVoice&&S.personaEmotion)?emotionOf(text):{pitchAdj:0, rateAdj:0, volume:1};
+  u.rate=Math.max(0.5,Math.min(2,(rate||1)*(p.rateMul||1)*(1+(emo.rateAdj||0))));
+  u.pitch=Math.max(0,Math.min(2,(p.pitch||1)+(emo.pitchAdj||0)));
+  u.volume=emo.volume||1; u.lang=(S.accent==='US'?'en-US':'en-GB');
+  var v=chooseVoice(p.female); if(v) u.voice=v;
+  u.onend=function(){ if(onend) onend(); };
+  u.onerror=function(){ if(onend) onend(); };
+  speechSynthesis.speak(u);
+}
+function personaBadge(sp, lesson){ if(!S.personaVoice) return ''; var p=personaOf(sp, lesson); return '<span class="persona-pill" style="background:'+p.color+';color:#374151">'+p.label+'</span>'; }
+function stopAudioOnly(){ if(S.playTimer){clearTimeout(S.playTimer);S.playTimer=null;} if('speechSynthesis' in window) speechSynthesis.cancel(); }
+function speak(text, rate, onend){
+  if(!('speechSynthesis' in window)){ if(onend) onend(); return; }
+  try{ speechSynthesis.cancel(); }catch(e){}
+  var u=new SpeechSynthesisUtterance(text);
+  var v=pickVoice(); if(v) u.voice=v;
+  u.lang=v?v.lang:(S.accent==='US'?'en-US':'en-GB'); u.rate=rate||S.speed; u.pitch=1;
+  if(onend) u.onend=onend;
+  try{ speechSynthesis.speak(u); }catch(e){ if(onend) onend(); }
+}
+function playSeq(lesson, idx){
+  if(!('speechSynthesis' in window)) return;
+  stopSpeak(); S.playing=true; S.playIdx=idx||0; render();
+  (function loop(i){
+    if(!S.playing||i>=lesson.dialogue.length){ stopSpeak(); render(); return; }
+    S.playIdx=i; render();
+    var repCount=S.repeatCount||1, repDone=0;
+    (function repLoop(){
+      if(!S.playing){ return; }
+      speakAs(lesson.dialogue[i].t, lesson.dialogue[i].sp, S.speed, function(){
+        repDone++;
+        if(repDone<repCount){ S.playTimer=setTimeout(repLoop, 300); }
+        else { S.playTimer=setTimeout(function(){ loop(i+1); }, 400); }
+      }, lesson);
+    })();
+  })(S.playIdx);
+}
+
+/* ==================== CONFETTI ==================== */
+var confCanvas=document.getElementById('confetti'), ctx=confCanvas.getContext('2d'), confParts=[], confRAF=null;
+function resizeConf(){ confCanvas.width=window.innerWidth; confCanvas.height=window.innerHeight; }
+window.addEventListener('resize',resizeConf); resizeConf();
+function celebrate(){
+  if(confRAF) cancelAnimationFrame(confRAF);
+  confParts=[];
+  var colors=['#e0528a','#e8912d','#2e9e6b','#6366f1','#f59e0b'];
+  for(var i=0;i<120;i++){
+    confParts.push({x:Math.random()*confCanvas.width,y:-20-Math.random()*confCanvas.height*0.5,
+      w:6+Math.random()*6,h:8+Math.random()*8,c:colors[i%colors.length],
+      vy:2+Math.random()*3,vx:-2+Math.random()*4,rot:Math.random()*360,vr:-5+Math.random()*10});
+  }
+  var start=performance.now(), dur=3500;
+  (function frame(now){
+    var p=Math.min(1,(now-start)/dur);
+    ctx.clearRect(0,0,confCanvas.width,confCanvas.height);
+    confParts.forEach(function(pt){
+      pt.y+=pt.vy; pt.x+=pt.vx; pt.rot+=pt.vr;
+      ctx.save(); ctx.translate(pt.x,pt.y); ctx.rotate(pt.rot*Math.PI/180);
+      ctx.globalAlpha=1-p*0.8; ctx.fillStyle=pt.c; ctx.fillRect(-pt.w/2,-pt.h/2,pt.w,pt.h); ctx.restore();
+    });
+    if(p<1){ confRAF=requestAnimationFrame(frame); } else { ctx.clearRect(0,0,confCanvas.width,confCanvas.height); confRAF=null; }
+  })(start);
+}
+
+/* ==================== RENDER ==================== */
+var app=document.getElementById('app');
+function render(){
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.toggle('active', n.dataset.view===S.view); });
+  if(S.view==='learn'){ if(S.lessonId) renderLesson(); else renderRoadmap(); }
+  else if(S.view==='stats') renderStats();
+  else if(S.view==='vocab') renderVocab();
+  else renderSettings();
+  if(window.lucide) try{ lucide.createIcons(); }catch(e){}
+}
+
+function renderRoadmap(){
+  var done=LESSONS.filter(function(l){return isDone(l.id);}).length;
+  var html='<div class="fade-in">';
+  html+='<div class="card p-4 mb-4" style="padding:16px">';
+  html+='<div class="flex items-center justify-between mb-2"><span class="small muted">Tiến độ tổng thể</span><span class="small font-bold" style="color:var(--accent)">'+done+'/'+LESSONS.length+' bài</span></div>';
+  html+='<div class="progress-track"><div class="progress-fill" style="width:'+(done/LESSONS.length*100)+'%"></div></div>';
+  html+='</div>';
+  var _next=LESSONS.find(function(l){return !isDone(l.id);});
+  var _dueN=srsDue().length;
+  var _done=LESSONS.filter(function(l){return isDone(l.id);});
+  var _rev=_done.length?_done[Math.floor(_done.length/2)]:null;
+  if(_next||_rev||_dueN>0){
+    html+='<div class="card" style="padding:14px;margin-bottom:14px;border-left:4px solid var(--accent)">';
+    html+='<div class="font-bold small mb-2" style="color:var(--accent)">Hôm nay học gì?</div><div class="flex flex-wrap gap-2">';
+    if(_next) html+='<button class="btn btn-primary btn-sm" data-action="go-lesson" data-id="'+_next.id+'"><i data-lucide="play" style="width:12px;height:12px;fill:#fff"></i> Bài mới: '+_next.title+'</button>';
+    if(_rev) html+='<button class="btn btn-secondary btn-sm" data-action="go-lesson" data-id="'+_rev.id+'"><i data-lucide="rotate-ccw" style="width:12px;height:12px"></i> Ôn lại: '+_rev.title+'</button>';
+    if(_dueN>0) html+='<button class="btn btn-sm" style="background:var(--accent2);color:#fff" data-action="go-review"><i data-lucide="brain" style="width:12px;height:12px"></i> Ôn '+_dueN+' từ SRS</button>';
+    html+='</div></div>';
+  }
+  html+='<input class="dict-input mb-3" id="searchInput" placeholder="Tìm kiếm bài học theo tên hoặc chủ đề..." value="'+S.search.replace(/"/g,'&quot;')+'">';
+  html+='<div class="chips">';
+  [['ALL','Tất cả'],['A','Sơ cấp A1-A2'],['B','Trung cấp B1-B2'],['C','Nâng cao C1']].forEach(function(f){
+    html+='<button class="chip '+(S.filter===f[0]?'active':'')+'" data-action="filter" data-filter="'+f[0]+'">'+f[1]+'</button>';
+  });
+  html+='</div>';
+  LESSONS.forEach(function(l,idx){
+    if(S.filter!=='ALL'&&levelGroup(l.level)!==S.filter) return;
+    if(S.search && (l.title+' '+l.topic).toLowerCase().indexOf(S.search.toLowerCase())===-1) return;
+    var p=prog(l.id), d=isDone(l.id);
+    var steps=(p.s1?1:0)+(p.s2!==null?1:0)+(p.s3?1:0)+(p.s4?1:0);
+    html+='<div class="card card-hover mb-3" style="padding:16px;cursor:pointer" data-action="go-lesson" data-id="'+l.id+'">';
+    html+='<div class="flex items-start justify-between gap-3">';
+    html+='<div style="flex:1;min-width:0">';
+    html+='<div class="flex gap-2 flex-wrap mb-1">';
+    html+='<span class="pill lv-'+levelGroup(l.level)+'">Bài '+(idx+1)+' · '+l.level+'</span>';
+    if(l.deep) html+='<span class="pill deep-badge">Sâu · 7 ngày</span>';
+    if(d) html+='<span class="pill" style="background:var(--ok-soft);color:var(--ok)">Hoàn thành</span>';
+    html+='</div>';
+    html+='<div class="font-bold" style="font-size:16px">'+l.title+'</div>';
+    html+='<div class="small muted mt-1">'+l.topic+' · ~'+l.minutes+' phút · '+l.dialogue.length+' câu</div>';
+    html+='</div>';
+    html+='<div style="width:40px;height:40px;border-radius:12px;background:'+(d?'var(--ok-soft)':'var(--accent-soft)')+';display:flex;align-items:center;justify-content:center;flex-shrink:0">';
+    if(d) html+='<i data-lucide="check" style="color:var(--ok);width:20px;height:20px"></i>';
+    else html+='<i data-lucide="play" style="color:var(--accent);width:18px;height:18px;fill:var(--accent)"></i>';
+    html+='</div></div>';
+    html+='<div class="progress-track mt-3"><div class="progress-fill" style="width:'+(steps/4*100)+'%"></div></div>';
+    html+='<div class="xsmall muted mt-1.5">'+steps+'/4 bước'+(p.s2!==null?' · Quiz: '+p.s2+'/'+l.quiz.length:'')+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  app.innerHTML=html;
+}
+
+function renderLesson(){
+  var l=cur(), p=prog(l.id);
+  var html='<div class="fade-in">';
+  html+='<div class="flex items-center gap-2 mb-4">';
+  html+='<button class="icon-btn" data-action="go-home"><i data-lucide="arrow-left" style="width:18px;height:18px"></i></button>';
+  html+='<div style="flex:1;min-width:0"><div class="font-bold" style="font-size:16px">'+l.title+'</div><div class="xsmall muted">'+l.topic+' · Trình độ '+l.level+'</div></div>';
+  html+='</div>';
+  html+='<div class="step-tabs">';
+  var steps=[{n:1,label:'Bắt âm',done:p.s1},{n:2,label:'Nghe vận dụng',done:p.s2!==null},{n:3,label:'Nghe chi tiết',done:p.s3},{n:4,label:'Dictation',done:p.s4}];
+  steps.forEach(function(st){
+    html+='<button class="step-tab '+(S.step===st.n?'active':'')+' '+(st.done?'done':'')+'" data-action="go-step" data-step="'+st.n+'">';
+    html+='<span class="step-num">'+(st.done?'✓':st.n)+'</span><span>'+st.label+'</span></button>';
+  });
+  html+='</div>';
+  if(l.deep){
+    html+='<div class="day-plan"><div class="flex items-center gap-2"><i data-lucide="calendar-days" style="width:16px;height:16px;color:var(--accent)"></i><span class="font-bold small">Bài sâu — kế hoạch học 7 ngày kiểu A.J. Hoge</span></div>';
+    html+='<div class="day-plan-grid">';
+    var days=['Ngày 1: Nghe thuần cả bài','Ngày 2: Nghe từng câu + dịch','Ngày 3: Shadowing đọc theo','Ngày 4: Dictation gõ lại','Ngày 5: Quiz + ôn từ vựng','Ngày 6: Nghe lại tốc độ nhanh','Ngày 7: Thu âm lại toàn bài'];
+    days.forEach(function(d){ html+='<div class="day-plan-item">'+d+'</div>'; });
+    html+='</div></div>';
+  }
+  if(S.step===1) html+=renderStep1(l,p);
+  else if(S.step===2) html+=renderStep2(l,p);
+  else if(S.step===3) html+=renderStep3(l,p);
+  else html+=renderStep4(l,p);
+  html+='</div>';
+  app.innerHTML=html;
+}
+
+/* STEP 1: vocab flashcard */
+function renderStep1(l,p){
+  var v=l.vocab[S.vocabIdx], isLast=S.vocabIdx===l.vocab.length-1;
+  var key=l.id+':'+v.w, known=!!S.known[key];
+  var html='<div class="card" style="padding:18px">';
+  html+='<div class="flex items-center justify-between mb-2"><span class="pill" style="background:var(--accent-soft);color:var(--accent)">Bước 1 · Bắt âm</span><span class="small muted">'+(S.vocabIdx+1)+'/'+l.vocab.length+' từ</span></div>';
+  html+='<div class="progress-track mb-3"><div class="progress-fill" style="width:'+((S.vocabIdx+1)/l.vocab.length*100)+'%"></div></div>';
+  html+='<div class="flip-card" data-action="flip-card"><div class="flip-inner '+(S.flipped?'flipped':'')+'">';
+  html+='<div class="flip-face flip-front">';
+  html+='<div style="font-size:32px;font-weight:700;margin-bottom:6px">'+v.w+'</div>';
+  html+='<div class="muted" style="font-size:16px;margin-bottom:18px">'+v.ph+'</div>';
+  html+='<button class="btn btn-primary btn-sm" data-action="speak-word" data-text="'+encodeURIComponent(v.w)+'"><i data-lucide="volume-2" style="width:14px;height:14px"></i>Nghe từ</button>';
+  html+='<div class="xsmall muted mt-4">Nhấn vào thẻ để xem nghĩa</div>';
+  html+='</div>';
+  html+='<div class="flip-face flip-back">';
+  html+='<div style="font-size:20px;font-weight:700;color:var(--accent2);margin-bottom:8px">'+v.m+'</div>';
+  html+='<div class="xsmall muted mb-2">Ví dụ:</div>';
+  html+='<div style="font-size:15px;font-weight:500;padding:0 8px;line-height:1.5;margin-bottom:14px">"' + v.ex + '"</div>';
+  html+='<button class="btn btn-sm" style="background:var(--accent2);color:#fff" data-action="speak-word" data-text="'+encodeURIComponent(v.ex)+'"><i data-lucide="volume-2" style="width:14px;height:14px"></i>Nghe ví dụ</button>';
+  html+='</div></div></div>';
+  html+='<div class="flex gap-2 mt-3">';
+  html+='<button class="btn btn-secondary btn-sm flex-1" data-action="prev-vocab" '+(S.vocabIdx===0?'disabled':'')+'>← Trước</button>';
+  html+='<button class="btn btn-sm flex-1 '+(known?'btn-ok':'btn-secondary')+'" data-action="toggle-known" data-key="'+key+'">'+(known?'✓ Đã thuộc':'Đánh dấu đã thuộc')+'</button>';
+  if(isLast) html+='<button class="btn btn-primary btn-sm flex-1" data-action="finish-step1">Hoàn thành →</button>';
+  else html+='<button class="btn btn-primary btn-sm flex-1" data-action="next-vocab">Tiếp →</button>';
+  html+='</div>';
+  if(p.s1) html+='<div class="text-center xsmall mt-3" style="color:var(--ok)">✓ Bạn đã hoàn thành bước này</div>';
+  html+='</div>';
+  return html;
+}
+
+/* STEP 2: quiz */
+function renderStep2(l,p){
+  var html='<div class="card" style="padding:18px">';
+  html+='<div class="flex items-center justify-between mb-3"><span class="pill" style="background:var(--accent2-soft);color:var(--accent2)">Bước 2 · Nghe vận dụng</span><span class="small muted">'+l.quiz.length+' câu</span></div>';
+  html+='<div style="background:var(--accent-soft);border-radius:14px;padding:14px;margin-bottom:16px">';
+  html+='<div class="small font-bold mb-2">Nghe đoạn hội thoại</div>';
+  html+='<div class="flex items-center gap-2 flex-wrap">';
+  if(!S.playing){
+    html+='<button class="btn btn-primary btn-sm" data-action="play-all"><i data-lucide="play" style="width:14px;height:14px;fill:#fff"></i>Nghe cả đoạn</button>';
+  } else {
+    html+='<button class="btn btn-sm" style="background:var(--bad);color:#fff" data-action="stop-play"><i data-lucide="square" style="width:14px;height:14px;fill:#fff"></i>Dừng</button>';
+    html+='<span class="pulse-dot small" style="color:var(--accent)">● Đang đọc câu '+(S.playIdx+1)+'/'+l.dialogue.length+'</span>';
+  }
+  html+='<span class="xsmall muted">Tốc độ: '+S.speed+'x (điều chỉnh ở Cài đặt)</span>';
+  html+='</div></div>';
+  l.quiz.forEach(function(q,qi){
+    html+='<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">';
+    html+='<div class="font-semibold mb-2" style="font-size:14px">Câu '+(qi+1)+': '+q.q+'</div>';
+    q.opts.forEach(function(opt,oi){
+      var cls='';
+      if(S.quizSubmitted){ if(oi===q.a) cls='correct'; else if(S.answers[qi]===oi) cls='wrong'; }
+      else if(S.answers[qi]===oi) cls='selected';
+      html+='<button class="opt-btn '+cls+'" data-action="pick-answer" data-qi="'+qi+'" data-oi="'+oi+'"><span class="opt-letter">'+String.fromCharCode(65+oi)+'</span>'+opt+'</button>';
+    });
+    if(S.quizSubmitted) html+='<div class="xsmall mt-2" style="background:var(--accent2-soft);padding:8px 12px;border-radius:8px">Giải thích: '+q.ex+'</div>';
+    html+='</div>';
+  });
+  if(!S.quizSubmitted){
+    var allAns=l.quiz.every(function(_,i){return S.answers[i]!==undefined;});
+    html+='<button class="btn btn-primary w-full" data-action="submit-quiz" '+(allAns?'':'disabled')+'>Chấm điểm</button>';
+    if(!allAns) html+='<div class="text-center xsmall mt-2 muted">Hãy chọn đáp án cho tất cả các câu</div>';
+  } else {
+    var score=l.quiz.filter(function(q,i){return S.answers[i]===q.a;}).length;
+    html+='<div style="background:var(--ok-soft);border-radius:14px;padding:16px;text-align:center">';
+    html+='<div style="font-size:26px;font-weight:700;color:var(--ok)">'+score+'/'+l.quiz.length+'</div>';
+    html+='<div class="small mt-1">'+(score===l.quiz.length?'Tuyệt vời! Nghe rất chính xác.':'Hãy luyện tiếp ở bước 3 và 4 nhé.')+'</div>';
+    html+='<button class="btn btn-primary btn-sm mt-3" data-action="go-step" data-step="3">Sang bước 3 →</button>';
+    html+='</div>';
+  }
+  html+='</div>';
+  return html;
+}
+
+/* STEP 3: detailed transcript + shadowing record */
+function renderStep3(l,p){
+  var canRec=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+  var html='<div class="card" style="padding:18px">';
+  html+='<div class="flex items-center justify-between mb-3 flex-wrap gap-2"><span class="pill" style="background:var(--ok-soft);color:var(--ok)">Bước 3 · Nghe chi tiết</span>';
+  html+='<button class="btn btn-secondary btn-sm" data-action="toggle-trans">'+(S.showTrans?'✓ Đang hiện dịch':'Hiện/Ẩn dịch')+'</button>';
+  html+='<button class="btn btn-secondary btn-sm" data-action="toggle-listen-only">'+(S.listenOnly?'✓ Chỉ nghe (ẩn chữ)':'Chế độ chỉ nghe')+'</button></div>';
+  html+='<div class="flex items-center gap-2 flex-wrap mb-3">';
+  html+='<span class="xsmall muted">Tốc độ:</span><div class="seg">';
+  [0.5,0.75,1.0,1.25].forEach(function(sp){ html+='<button class="'+(S.speed===sp?'active':'')+'" data-action="set-speed" data-speed="'+sp+'">'+sp+'x</button>'; });
+  html+='</div>';
+  html+='<span class="xsmall muted">Lặp:</span><div class="seg">';[1,3,5].forEach(function(rp){ html+='<button class="'+(S.repeatCount===rp?'active':'')+'" data-action="set-repeat" data-repeat="'+rp+'">'+rp+'x</button>'; });html+='</div>';
+  if(!S.playing) html+='<button class="btn btn-primary btn-sm ml-auto" data-action="play-all" style="margin-left:auto"><i data-lucide="play" style="width:12px;height:12px;fill:#fff"></i>Nghe cả đoạn</button>';
+  else html+='<button class="btn btn-sm" style="background:var(--bad);color:#fff;margin-left:auto" data-action="stop-play">Dừng</button>';
+  html+='</div>';
+  l.dialogue.forEach(function(d,i){
+    var playing=S.playIdx===i&&S.playing;
+    html+='<div class="sent-row '+(playing?'playing':'')+'">';
+    html+='<button class="sent-play" data-action="play-one" data-idx="'+i+'"><i data-lucide="play" style="fill:currentColor"></i></button>';
+    html+='<div style="flex:1;min-width:0">';
+    html+='<div class="xsmall font-bold mb-0.5" style="color:'+(i%2===0?'var(--accent)':'var(--accent2)')+'">'+d.sp+(S.personaVoice?personaBadge(d.sp,l)+emotionBadge(d.t):'')+(playing?' <span class="wave"><span></span><span></span><span></span><span></span></span> đang đọc':'')+'</div>';
+    if(S.listenOnly){ html+='<div style="font-size:14px;font-weight:500;line-height:1.5;letter-spacing:4px;color:var(--muted)">• • • • • • • •</div>'; } else { html+='<div style="font-size:14px;font-weight:500;line-height:1.5">'+d.t+'</div>'; }
+    if(S.showTrans) html+='<div class="xsmall muted mt-1" style="line-height:1.5">'+l.trans[i]+'</div>';
+    html+='</div></div>';
+  });
+  // Shadowing record
+  if(canRec){
+    html+='<div style="background:var(--accent2-soft);border-radius:14px;padding:14px;margin-top:14px;text-align:center">';
+    html+='<div class="font-bold small mb-1">Shadowing — đọc theo và ghi âm</div>';
+    html+='<div class="xsmall muted mb-3">Nghe một câu, nhấn nút đỏ rồi đọc to theo, nhấn lại để dừng và nghe lại bản ghi của bạn.</div>';
+    html+='<div class="flex items-center justify-center gap-4">';
+    html+='<button class="rec-btn '+(S.recording?'recording':'')+'" data-action="record-toggle">';
+    if(S.recording) html+='<i data-lucide="square" style="width:22px;height:22px;fill:#fff"></i>';
+    else html+='<i data-lucide="mic" style="width:22px;height:22px"></i>';
+    html+='</button>';
+    if(S.recUrl) html+='<audio controls src="'+S.recUrl+'" style="height:36px;max-width:180px"></audio>';
+    html+='</div></div>';
+  }
+  if(!p.s3){
+    html+='<button class="btn btn-ok w-full mt-4" data-action="finish-step3">Hoàn thành bước 3 →</button>';
+  } else {
+    html+='<div class="text-center xsmall mt-3" style="color:var(--ok)">✓ Bước 3 hoàn thành — hãy sang bước 4 Dictation</div>';
+    html+='<button class="btn btn-primary w-full mt-2" data-action="go-step" data-step="4">Sang bước 4 →</button>';
+  }
+  html+='</div>';
+  return html;
+}
+
+/* STEP 4: dictation */
+function renderStep4(l,p){
+  var total=Math.min(3,l.dialogue.length);
+  var gapWord=null;
+  var idx=Math.min(S.dictIdx,total-1);
+  var sentence=l.dialogue[idx].t;
+  var html='<div class="card" style="padding:18px">';
+  html+='<div class="flex items-center justify-between mb-3 flex-wrap gap-2"><span class="pill" style="background:var(--accent-soft);color:var(--accent)">Bước 4 · Dictation</span><div class="flex gap-2 items-center"><button class="btn btn-ghost btn-sm" data-action="toggle-dict-mode">Chế độ: '+(S.dictMode==='full'?'Gõ cả câu':'Điền từ')+'</button><span class="small muted">Câu '+(idx+1)+'/'+total+'</span></div></div>';
+  html+='<div class="progress-track mb-4"><div class="progress-fill" style="width:'+((idx+1)/total*100)+'%"></div></div>';
+  html+='<div class="text-center mb-4">';
+  html+='<button class="btn btn-primary" data-action="dict-play" data-idx="'+idx+'" style="padding:16px 28px"><i data-lucide="volume-2" style="width:20px;height:20px"></i>Nghe câu</button>';
+  html+='<div class="xsmall muted mt-2">Nghe nhiều lần, rồi gõ chính xác câu bạn nghe được</div>';
+  html+='</div>';
+  if(S.dictResults[idx]===undefined){
+    if(S.dictMode==='gap'){
+      gapWord=pickGapWord(sentence);
+      if(gapWord){
+        var masked=sentence.replace(new RegExp('\\b'+gapWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i'),'____('+gapWord.length+' chữ)');
+        html+='<div class="small mb-2 muted">Nghe và điền từ bị thiếu:</div>';
+        html+='<div class="card" style="padding:12px;margin-bottom:10px;font-size:14px;font-weight:500">'+masked+'</div>';
+        html+='<input class="dict-input mb-3" id="dictInput" placeholder="Gõ từ bị ẩn (không dấu)..." autocomplete="off" autocapitalize="off" spellcheck="false">';
+      } else { S.dictMode='full'; }
+    }
+    if(S.dictMode==='full'){
+    html+='<input class="dict-input" id="dictInput" placeholder="Gõ câu bạn nghe được ở đây..." autocomplete="off" autocapitalize="off" spellcheck="false">';
+    html+='<button class="btn btn-primary w-full mt-3" data-action="dict-submit">Kiểm tra</button>';
+    }
+  } else {
+    var r=S.dictResults[idx];
+    html+='<div style="background:'+(r.pct>=80?'var(--ok-soft)':'var(--bad-soft)')+';border-radius:14px;padding:14px;margin-bottom:12px">';
+    html+='<div class="font-bold mb-1" style="color:'+(r.pct>=80?'var(--ok)':'var(--bad)')+'">Độ chính xác: '+r.pct+'% '+(r.pct>=80?'Tuyệt vời!':'Cần luyện nghe lại')+'</div>';
+    html+='<div class="small mb-1"><span class="muted">Bạn gõ: </span>'+r.user+(r.gap?' <span class="xsmall muted">(từ cần điền: '+r.gap+')</span>':'')+'</div>';
+    html+='<div class="small"><span class="muted">Đáp án: </span><strong>'+sentence+'</strong></div>';
+    html+='</div>';
+    if(idx<total-1) html+='<button class="btn btn-primary w-full" data-action="dict-next">Câu tiếp theo →</button>';
+    else {
+      var avg=Math.round(S.dictResults.reduce(function(a,b){return a+b.pct;},0)/S.dictResults.length);
+      html+='<div style="background:var(--ok-soft);border-radius:14px;padding:16px;text-align:center">';
+      html+='<div style="font-size:22px;font-weight:700;color:var(--ok)">Trung bình: '+avg+'%</div>';
+      html+='<button class="btn btn-ok btn-sm mt-3" data-action="finish-step4">Hoàn thành bài học</button>';
+      html+='</div>';
+    }
+  }
+  html+='</div>';
+  return html;
+}
+
+/* STATS */
+function renderStats(){
+  var done=LESSONS.filter(function(l){return isDone(l.id);}).length;
+  var totalVocab=LESSONS.reduce(function(a,l){return a+l.vocab.length;},0);
+  var knownCount=Object.keys(S.known).filter(function(k){return S.known[k];}).length;
+  var quizScores=LESSONS.map(function(l){return {l:l,s:prog(l.id).s2};}).filter(function(x){return x.s!==null;});
+  var avgScore=quizScores.length?Math.round(quizScores.reduce(function(a,x){return a+x.s/x.l.quiz.length*100;},0)/quizScores.length):0;
+  var html='<div class="fade-in">';
+  html+='<div class="section-title">Thống kê học tập</div><div class="section-sub">Dữ liệu được lưu trên trình duyệt của bạn</div>';
+  html+='<div class="stat-grid">';
+  html+='<div class="stat-box"><div class="stat-num">'+S.streak.count+'</div><div class="stat-label">Ngày học liên tiếp</div></div>';
+  html+='<div class="stat-box"><div class="stat-num">'+done+'/'+LESSONS.length+'</div><div class="stat-label">Bài hoàn thành</div></div>';
+  html+='<div class="stat-box"><div class="stat-num">'+knownCount+'</div><div class="stat-label">Từ đã thuộc</div></div>';
+  html+='<div class="stat-box"><div class="stat-num">'+avgScore+'%</div><div class="stat-label">Điểm quiz trung bình</div></div>';
+  var totalMin=0; for(var k in S.history) totalMin+=S.history[k];
+  html+='<div class="stat-box"><div class="stat-num">'+totalMin+'</div><div class="stat-label">Phút học tổng</div></div>';
+  html+='</div>';
+  html+='<div class="card" style="padding:18px;margin-bottom:16px">';
+  html+='<div class="font-bold mb-3" style="font-size:15px">Điểm quiz từng bài</div>';
+  if(!quizScores.length) html+='<div class="small muted">Chưa có dữ liệu — hoàn thành bước 2 của các bài để xem điểm.</div>';
+  quizScores.forEach(function(x){
+    var pct=Math.round(x.s/x.l.quiz.length*100);
+    html+='<div class="bar-row"><div class="bar-label">'+x.l.title+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%">'+x.s+'/'+x.l.quiz.length+'</div></div></div>';
+  });
+  html+='</div>';
+  html+='<div class="card" style="padding:18px">';
+  html+='<div class="font-bold mb-2" style="font-size:15px">Lộ trình trình độ</div>';
+  ['A','B','C'].forEach(function(g){
+    var group=LESSONS.filter(function(l){return levelGroup(l.level)===g;});
+    var gd=group.filter(function(l){return isDone(l.id);}).length;
+    var label=g==='A'?'Sơ cấp A1-A2':(g==='B'?'Trung cấp B1-B2':'Nâng cao C1');
+    html+='<div class="bar-row"><div class="bar-label">'+label+'</div><div class="bar-track"><div class="bar-fill" style="width:'+(gd/group.length*100)+'%">'+gd+'/'+group.length+'</div></div></div>';
+  });
+  html+='<div class="card" style="padding:18px;margin-top:16px">';
+  html+='<div class="font-bold mb-1" style="font-size:15px">Lịch học 12 tuần gần nhất</div>';
+  html+='<div class="xsmall muted mb-2">Mỗi ô = 1 ngày · màu đậm hơn = học nhiều phút hơn</div>';
+  html+='<div class="cal-grid">';
+  var now=new Date();
+  for(var w=11;w>=0;w--){
+    for(var d=6;d>=0;d--){
+      var dt=new Date(now.getTime()-(w*7+d)*86400000);
+      var dk=dt.toISOString().slice(0,10);
+      var mins=S.history[dk]||0;
+      var cls='cal-cell'+(mins>0?(mins>=20?' cal-l3':(mins>=10?' cal-l2':' cal-l1')):'');
+      html+='<div class="'+cls+'" title="'+dk+': '+mins+' phút"></div>';
+    }
+  }
+  html+='</div>';
+  html+='<div class="cal-legend xsmall muted"><span>Ít</span><span class="cal-cell"></span><span class="cal-cell cal-l1"></span><span class="cal-cell cal-l2"></span><span class="cal-cell cal-l3"></span><span>Nhiều</span></div>';
+  html+='</div></div>';
+  app.innerHTML=html;
+}
+
+/* VOCAB NOTEBOOK */
+function renderVocab(){
+  var dueKeys=srsDue();
+  if(S.reviewMode){
+    var html='<div class="fade-in">';
+    html+='<div class="section-title">Ôn tập từ vựng (SRS)</div><div class="section-sub">Lịch ôn: 1→3→7→14→30 ngày · Còn '+(S.reviewList.length-S.reviewIdx)+' từ</div>';
+    if(S.reviewIdx>=S.reviewList.length){
+      html+='<div class="card" style="padding:30px;text-align:center"><div style="font-size:36px;margin-bottom:8px;color:var(--ok)">✓</div><div class="font-bold text-lg">Hoàn thành phiên ôn tập!</div><div class="small muted mt-1">Các từ sẽ tự xuất hiện lại vào ngày ôn tiếp theo.</div><button class="btn btn-primary mt-4" data-action="review-exit">Về sổ từ</button></div>';
+    } else {
+      var rkey=S.reviewList[S.reviewIdx], rw=wordByKey(rkey);
+      if(rw){
+        html+='<div class="card" style="padding:24px;text-align:center">';
+        html+='<div style="font-size:28px;font-weight:700;margin-bottom:6px">'+rw.w+'</div>';
+        html+='<div class="muted mb-4">'+rw.ph+'</div>';
+        html+='<button class="btn btn-secondary btn-sm mb-4" data-action="speak-word" data-text="'+encodeURIComponent(rw.w)+'"><i data-lucide="volume-2" style="width:14px;height:14px"></i>Nghe từ</button>';
+        html+='<div class="small mb-4" id="reviewMeaning" style="display:none;color:var(--accent2);font-weight:600">'+rw.m+'<br><span class="xsmall muted" style="font-weight:400">"'+rw.ex+'"</span></div>';
+        html+='<button class="btn btn-ghost btn-sm mb-4" data-action="review-reveal">Hiện nghĩa</button>';
+        html+='<div class="flex gap-2 justify-center"><button class="btn btn-sm" style="background:var(--bad);color:#fff" data-action="review-unknown">Không nhớ</button><button class="btn btn-ok btn-sm" data-action="review-known">Nhớ</button></div>';
+        html+='</div>';
+      } else { S.reviewIdx++; render(); return; }
+    }
+    html+='</div>'; app.innerHTML=html; if(window.lucide) try{lucide.createIcons();}catch(e){} return;
+  }
+  var knownWords=[], unknownWords=[];
+  LESSONS.forEach(function(l){
+    l.vocab.forEach(function(v){
+      var key=l.id+':'+v.w;
+      if(S.known[key]) knownWords.push({v:v,l:l,key:key});
+      else unknownWords.push({v:v,l:l,key:key});
+    });
+  });
+  var html='<div class="fade-in">';
+  html+='<div class="section-title">Sổ tay từ vựng</div><div class="section-sub">Từ đánh dấu "đã thuộc" ở bước 1 sẽ được lưu ở đây. Tổng: '+knownWords.length+' đã thuộc / '+unknownWords.length+' cần ôn.</div>';
+  if(dueKeys.length>0){
+    html+='<div class="card" style="padding:14px;margin-bottom:14px;border-left:4px solid var(--accent2)">';
+    html+='<div class="flex items-center justify-between gap-2 flex-wrap"><div><div class="font-bold small" style="color:var(--accent2)">Có '+dueKeys.length+' từ đến hạn ôn hôm nay</div><div class="xsmall muted">Ôn ngay để ghi nhớ lâu dài theo thuật toán lặp lại ngắt quãng.</div></div>';
+    html+='<button class="btn btn-sm" style="background:var(--accent2);color:#fff" data-action="review-start">Bắt đầu ôn</button></div></div>';
+  }
+  html+='<div class="card" style="padding:18px;margin-bottom:14px">';
+  html+='<div class="font-bold mb-2" style="font-size:15px;color:var(--bad)">Từ cần ôn ('+unknownWords.length+')</div>';
+  if(!unknownWords.length) html+='<div class="small muted">Tuyệt vời! Bạn đã thuộc tất cả từ vựng.</div>';
+  unknownWords.slice(0,30).forEach(function(item){
+    html+='<div class="flex items-center justify-between gap-2 py-2" style="border-bottom:1px solid var(--border)">';
+    html+='<div style="flex:1;min-width:0"><div class="font-semibold small">'+item.v.w+' <span class="muted xsmall">'+item.v.ph+'</span></div><div class="xsmall muted">'+item.v.m+' · '+item.l.title+'</div></div>';
+    html+='<button class="icon-btn" style="width:32px;height:32px" data-action="speak-word" data-text="'+encodeURIComponent(item.v.w)+'"><i data-lucide="volume-2" style="width:14px;height:14px"></i></button>';
+    html+='<button class="btn btn-ok btn-sm" data-action="toggle-known" data-key="'+item.key+'">Đã thuộc</button>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div class="card" style="padding:18px">';
+  html+='<div class="font-bold mb-2" style="font-size:15px;color:var(--ok)">Từ đã thuộc ('+knownWords.length+')</div>';
+  knownWords.slice(0,20).forEach(function(item){
+    html+='<div class="flex items-center justify-between gap-2 py-1.5">';
+    html+='<div class="small"><strong>'+item.v.w+'</strong> <span class="muted xsmall">— '+item.v.m+'</span></div>';
+    html+='<button class="btn btn-ghost btn-sm" data-action="toggle-known" data-key="'+item.key+'">Bỏ đánh dấu</button>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+  app.innerHTML=html;
+}
+
+/* SETTINGS */
+function renderSettings(){
+  var html='<div class="fade-in">';
+  html+='<div class="section-title">Cài đặt</div><div class="section-sub">Tùy chỉnh trải nghiệm học của bạn</div>';
+  html+='<div class="card" style="padding:18px;margin-bottom:14px">';
+  html+='<div class="font-bold mb-3" style="font-size:15px">Giọng đọc (Voice)</div>';
+  var enVoices=voices.filter(function(v){return /^en/i.test(v.lang);});
+  if(enVoices.length){
+    html+='<select id="voiceSelect" class="w-full" style="width:100%">';
+    enVoices.forEach(function(v){
+      html+='<option value="'+v.voiceURI+'" '+(S.voiceURI===v.voiceURI?'selected':'')+'>'+v.name+' ('+v.lang+')</option>';
+    });
+    html+='</select>';
+    html+='<button class="btn btn-secondary btn-sm mt-3" data-action="test-voice">Nghe thử giọng</button>';
+  } else {
+    html+='<div class="small muted">Đang tải danh sách giọng... (cần internet để tải giọng chất lượng cao). Mặc định dùng giọng Anh của hệ thống.</div>';
+  }
+  html+='<div class="font-bold mt-4 mb-2" style="font-size:15px">Tốc độ đọc mặc định</div>';
+  html+='<div class="seg">';
+  [0.5,0.75,1.0,1.25].forEach(function(sp){ html+='<button class="'+(S.speed===sp?'active':'')+'" data-action="set-speed" data-speed="'+sp+'">'+sp+'x</button>'; });
+  html+='</div></div>';
+  html+='<div class="card" style="padding:18px;margin-bottom:14px">';
+  html+='<div class="font-bold mb-2" style="font-size:15px">Giao diện</div>';
+  html+='<button class="btn btn-secondary btn-sm" data-action="toggle-dark">'+(S.dark?'Chế độ sáng':'Chế độ tối')+'</button>';
+  html+='</div>';
+  html+='<div class="card" style="padding:18px">';
+  html+='<div class="font-bold mt-4 mb-2" style="font-size:15px">Nhắc nhở học hàng ngày</div>';
+  html+='<div class="flex items-center gap-2 flex-wrap mb-2"><input type="time" id="reminderTime" value="'+S.reminderHour+'" class="dict-input" style="width:auto;padding:8px 12px"><button class="btn btn-sm '+(S.reminderOn?'btn-ok':'btn-secondary')+'" data-action="toggle-reminder">'+(S.reminderOn?'✓ Đã bật':'Bật nhắc nhở')+'</button></div>';
+  html+='<div class="xsmall muted mb-3">Giữ trang mở để nhận nhắc. Sẽ yêu cầu quyền thông báo của trình duyệt.</div>';
+  html+='<div class="font-bold mt-4 mb-2" style="font-size:15px;color:var(--bad)">Danger zone</div>';
+  html+='<div class="small muted mb-3">Xóa toàn bộ tiến độ, từ vựng và thống kê đã lưu.</div>';
+  html+='<div class="font-bold mt-4 mb-2" style="font-size:15px">Giọng đọc & ngữ điệu</div>';
+  html+='<div class="xsmall muted mb-2">Chất giọng mặc định:</div><div class="seg mb-3">';
+  ['US','UK'].forEach(function(ac){ html+='<button class="'+(S.accent===ac?'active':'')+'" data-action="set-accent" data-accent="'+ac+'">'+(ac==='US'?'Tiếng Mỹ':'Tiếng Anh (Anh)')+'</button>'; });
+  html+='</div>';
+  html+='<button class="btn btn-sm '+(S.personaVoice?'btn-ok':'btn-secondary')+'" data-action="toggle-persona">'+(S.personaVoice?'✓ Đã bật ngữ điệu nhân vật':'Bật ngữ điệu nhân vật')+'</button>';
+  html+='<div class="xsmall muted mt-2 mb-3">Tự động đổi giọng 8 kiểu: Ông già / Bà già / Nam / Nữ / Trai trẻ / Gái trẻ / Bé trai / Bé gái — theo nhân vật & bối cảnh hội thoại, kèm ngữ điệu cảm xúc theo từng câu.</div>';
+  if(S.personaVoice){
+    html+='<div class="xsmall muted mb-1">Phát hiện nhân vật:</div><div class="seg mb-3">';
+    html+='<button class="'+(S.personaContext?'active':'')+'" data-action="set-persona-context" data-v="1">Tự động theo bối cảnh</button>';
+    html+='<button class="'+(S.personaContext?'':'active')+'" data-action="set-persona-context" data-v="0">Theo tên</button></div>';
+    html+='<button class="btn btn-sm mb-3 '+(S.personaEmotion?'btn-ok':'btn-secondary')+'" data-action="toggle-persona-emotion">'+(S.personaEmotion?'✓ Ngữ điệu cảm xúc theo câu':'Bật ngữ điệu cảm xúc')+'</button>';
+    html+='<div class="xsmall muted mb-2">Thử nghe 8 giọng nhân vật:</div><div class="flex flex-wrap gap-2 mb-2">';
+    [['elder_male','Ông già'],['elder_female','Bà già'],['adult_male','Nam'],['adult_female','Nữ'],['young_male','Trai trẻ'],['young_female','Gái trẻ'],['boy','Bé trai'],['girl','Bé gái']].forEach(function(k){ html+='<button class="btn btn-secondary btn-sm" data-action="test-persona" data-key="'+k[0]+'">'+k[1]+'</button>'; });
+    html+='</div>';
+  }
+  html+='<div class="font-bold mt-4 mb-2" style="font-size:15px">Sao lưu & phục hồi</div>';
+  html+='<div class="flex gap-2 flex-wrap">';
+  html+='<button class="btn btn-secondary btn-sm" data-action="export-data"><i data-lucide="download" style="width:14px;height:14px"></i>Xuất tiến độ (JSON)</button>';
+  html+='<button class="btn btn-secondary btn-sm" data-action="import-data"><i data-lucide="upload" style="width:14px;height:14px"></i>Nhập tiến độ</button>';
+  html+='<input type="file" id="importFile" accept=".json" style="display:none">';
+  html+='</div><div class="xsmall muted mt-2">Xuất file để sao lưu, nhập lại để khôi phục trên máy khác.</div>';
+    html+='<button class="btn btn-sm" style="background:var(--bad);color:#fff" data-action="reset-progress">Đặt lại tiến độ</button>';
+  html+='</div>';
+  html+='<div class="text-center xsmall muted mt-6">Mochi Listen Pro · Phương pháp Intensive Listening 4 bước · Dữ liệu lưu cục bộ trên trình duyệt</div>';
+  html+='</div>';
+  app.innerHTML=html;
+}
+function populateVoiceSelect(){
+  var sel=document.getElementById('voiceSelect');
+  if(!sel||S.view!=='settings') return;
+  var enVoices=voices.filter(function(v){return /^en/i.test(v.lang);});
+  sel.innerHTML=enVoices.map(function(v){return '<option value="'+v.voiceURI+'" '+(S.voiceURI===v.voiceURI?'selected':'')+'>'+v.name+' ('+v.lang+')</option>';}).join('');
+}
+
+/* ==================== ACTIONS ==================== */
+function updateStreak(){
+  var today=new Date().toISOString().slice(0,10);
+  if(S.streak.last===today) return;
+  var yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10);
+  if(S.streak.last===yesterday) S.streak.count++;
+  else S.streak.count=1;
+  S.streak.last=today; save();
+}
+function markDoneCheck(l){
+  if(isDone(l.id)){ celebrate(); updateStreak(); }
+}
+
+var mediaRecorder=null, recChunks=[];
+function toggleRecord(){
+  if(!(navigator.mediaDevices&&window.MediaRecorder)) return;
+  if(S.recording){
+    if(mediaRecorder&&mediaRecorder.state!=='inactive') mediaRecorder.stop();
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    recChunks=[];
+    mediaRecorder=new MediaRecorder(stream);
+    mediaRecorder.ondataavailable=function(e){ if(e.data.size>0) recChunks.push(e.data); };
+    mediaRecorder.onstop=function(){
+      var blob=new Blob(recChunks,{type:'audio/webm'});
+      if(S.recUrl) try{ URL.revokeObjectURL(S.recUrl); }catch(e){}
+      S.recUrl=URL.createObjectURL(blob);
+      S.recording=false;
+      stream.getTracks().forEach(function(t){t.stop();});
+      render();
+    };
+    mediaRecorder.start();
+    S.recording=true; render();
+  }).catch(function(){
+    alert('Không thể truy cập micro. Vui lòng cấp quyền micro trong trình duyệt.');
+  });
+}
+
+document.addEventListener('click', function(e){
+  var el=e.target.closest('[data-action]');
+  if(!el) return;
+  var act=el.dataset.action;
+  if(act==='nav'){ S.view=el.dataset.view; stopSpeak(); render(); }
+  else if(act==='toggle-dark'){ S.dark=!S.dark; document.body.classList.toggle('dark',S.dark); render(); }
+  else if(act==='filter'){ S.filter=el.dataset.filter; render(); }
+  else if(act==='go-lesson'){ stopSpeak(); S.lessonId=parseInt(el.dataset.id); S.step=1; S.vocabIdx=0; S.flipped=false; S.answers={}; S.quizSubmitted=false; S.dictIdx=0; S.dictResults=[]; render(); }
+  else if(act==='go-home'){ stopSpeak(); S.lessonId=null; render(); }
+  else if(act==='go-step'){ stopSpeak(); S.step=parseInt(el.dataset.step); if(S.step===4){S.dictIdx=0;S.dictResults=[];} render(); }
+  else if(act==='flip-card'){ S.flipped=!S.flipped; render(); }
+  else if(act==='speak-word'){ speak(decodeURIComponent(el.dataset.text), S.speed); }
+  else if(act==='prev-vocab'){ if(S.vocabIdx>0){S.vocabIdx--;S.flipped=false;render();} }
+  else if(act==='next-vocab'){ var l=cur(); if(S.vocabIdx<l.vocab.length-1){S.vocabIdx++;S.flipped=false;render();} }
+  else if(act==='toggle-known'){ var k=el.dataset.key; S.known[k]=!S.known[k]; if(S.known[k]){ srsAdd(k); } else { delete S.known[k]; delete S.srs[k]; } save(); render(); }
+  else if(act==='go-review'){ S.view='vocab'; S.reviewMode=true; S.reviewList=srsDue(); S.reviewIdx=0; render(); }
+  else if(act==='review-start'){ S.reviewMode=true; S.reviewList=srsDue(); S.reviewIdx=0; render(); }
+  else if(act==='review-exit'){ S.reviewMode=false; render(); }
+  else if(act==='review-reveal'){ var rm=document.getElementById('reviewMeaning'); if(rm) rm.style.display='block'; }
+  else if(act==='review-known'){ if(S.reviewList[S.reviewIdx]) srsReview(S.reviewList[S.reviewIdx], true); S.reviewIdx++; render(); }
+  else if(act==='review-unknown'){ if(S.reviewList[S.reviewIdx]) srsReview(S.reviewList[S.reviewIdx], false); S.reviewIdx++; render(); }
+  else if(act==='toggle-reminder'){ S.reminderOn=!S.reminderOn; if(S.reminderOn && 'Notification' in window && Notification.permission==='default'){ try{ Notification.requestPermission(); }catch(e){} } save(); render(); }
+  else if(act==='set-accent'){ S.accent=el.dataset.accent; save(); render(); }
+  else if(act==='toggle-persona'){ S.personaVoice=!S.personaVoice; save(); render(); }
+  else if(act==='set-persona-context'){ S.personaContext=(el.dataset.v==='1'); save(); render(); }
+  else if(act==='toggle-persona-emotion'){ S.personaEmotion=!S.personaEmotion; save(); render(); }
+  else if(act==='test-persona'){ speakPersonaDemo(el.dataset.key); }
+  else if(act==='toggle-dict-mode'){ S.dictMode=(S.dictMode==='full'?'gap':'full'); S.dictIdx=0; S.dictResults=[]; render(); }
+  else if(act==='finish-step1'){ var p=prog(S.lessonId); p.s1=true; S.progress[S.lessonId]=p; save(); S.step=2; render(); }
+  else if(act==='play-all'){ playSeq(cur(), 0); }
+  else if(act==='stop-play'){ stopSpeak(); render(); }
+  else if(act==='play-one'){ stopSpeak(); var di=parseInt(el.dataset.idx), dtxt=cur().dialogue[di].t, dr=S.repeatCount||1, dd=0; (function dloop(){ speakAs(dtxt, cur().dialogue[di].sp, S.speed, function(){ dd++; if(dd<dr){ setTimeout(dloop,350); } }, cur()); })(); }
+  else if(act==='pick-answer'){ if(S.quizSubmitted) return; S.answers[parseInt(el.dataset.qi)]=parseInt(el.dataset.oi); render(); }
+  else if(act==='submit-quiz'){
+    var l2=cur(); var sc=l2.quiz.filter(function(q,i){return S.answers[i]===q.a;}).length;
+    S.quizSubmitted=true; var p2=prog(l2.id); p2.s2=sc; S.progress[l2.id]=p2; save(); render();
+  }
+  else if(act==='toggle-trans'){ S.showTrans=!S.showTrans; render(); }
+  else if(act==='set-speed'){ S.speed=parseFloat(el.dataset.speed); save(); render(); }
+  else if(act==='set-repeat'){ S.repeatCount=parseInt(el.dataset.repeat); render(); }
+  else if(act==='finish-step3'){ var p3=prog(S.lessonId); p3.s3=true; S.progress[S.lessonId]=p3; save(); S.step=4; S.dictIdx=0; S.dictResults=[]; render(); }
+  else if(act==='record-toggle'){ toggleRecord(); }
+  else if(act==='dict-play'){ speak(cur().dialogue[parseInt(el.dataset.idx)].t, S.speed); }
+  else if(act==='dict-submit'){
+    var inp=document.getElementById('dictInput');
+    var userTxt=inp?inp.value.trim():'';
+    var l4=cur(), total=Math.min(3,l4.dialogue.length), idx=Math.min(S.dictIdx,total-1);
+    var correct=l4.dialogue[idx].t;
+    var norm=function(s){return s.toLowerCase().replace(/[.,!?;:'"]/g,'').replace(/\s+/g,' ').trim();};
+    var pct;
+    if(S.dictMode==='gap'){
+      var gw=pickGapWord(correct);
+      pct=(norm(userTxt)===norm(gw||''))?100:0;
+      S.dictResults[idx]={user:userTxt||'(trống)', pct:pct, gap:gw};
+    } else {
+      var uW=norm(userTxt).split(' ').filter(Boolean), cW=norm(correct).split(' ');
+      var match=0; cW.forEach(function(w){ if(uW.indexOf(w)!==-1) match++; });
+      pct=Math.round(match/cW.length*100);
+      S.dictResults[idx]={user:userTxt||'(trống)', pct:pct};
+    }
+    render();
+  }
+  else if(act==='dict-next'){ S.dictIdx++; render(); setTimeout(function(){var i=document.getElementById('dictInput'); if(i) i.focus();},50); }
+  else if(act==='finish-step4'){
+    var p4=prog(S.lessonId); p4.s4=true; S.progress[S.lessonId]=p4;
+    var _ld=cur(), _today=new Date().toISOString().slice(0,10);
+    S.history[_today]=(S.history[_today]||0)+(_ld?_ld.minutes:5); save();
+    var ldone=cur(); markDoneCheck(ldone);
+    S.lessonId=null; render();
+  }
+  else if(act==='test-voice'){ speak('Hello! This is a test of the English voice. How are you today?', S.speed); }
+  else if(act==='toggle-listen-only'){ S.listenOnly=!S.listenOnly; render(); }
+  else if(act==='export-data'){ var blob=new Blob([JSON.stringify({progress:S.progress,known:S.known,streak:S.streak},null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='mochi-progress.json'; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},100); }
+  else if(act==='import-data'){ var f=document.getElementById('importFile'); if(f) f.click(); }
+  else if(act==='reset-progress'){
+    if(confirm('Bạn có chắc muốn xóa TOÀN BỘ tiến độ học? Hành động này không thể hoàn tác.')){
+      S.progress={}; S.known={}; S.streak={count:0,last:''}; save(); render();
+    }
+  }
+  try{ saveSettings(); }catch(e){}
+});
+/* voice select change */
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id==='voiceSelect'){ S.voiceURI=e.target.value; save(); try{saveSettings();}catch(e){} }
+});
+/* search input */
+document.addEventListener('input', function(e){
+  if(e.target && e.target.id==='searchInput'){
+    S.search=e.target.value; render();
+    var si=document.getElementById('searchInput');
+    if(si){ si.focus(); try{ si.setSelectionRange(si.value.length,si.value.length); }catch(err){} }
+  }
+});
+/* reminder time change */
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id==='reminderTime'){ S.reminderHour=e.target.value; save(); try{saveSettings();}catch(e){} }
+});
+/* reminder interval */
+setInterval(function(){
+  if(!S.reminderOn) return;
+  var now=new Date(), hm=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+  var today=now.toISOString().slice(0,10);
+  if(hm===S.reminderHour && S.remindedToday!==today){
+    S.remindedToday=today;
+    if('Notification' in window && Notification.permission==='granted'){ try{ new Notification('Mochi Listen Pro', {body:'Đến giờ học tiếng Anh rồi!'}); }catch(e){} }
+  }
+}, 30000);
+/* import file */
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id==='importFile'){
+    var file=e.target.files[0]; if(!file) return;
+    var reader=new FileReader();
+    reader.onload=function(ev){ try{ var data=JSON.parse(ev.target.result); if(data.progress) S.progress=data.progress; if(data.known) S.known=data.known; if(data.streak) S.streak=data.streak; save(); render(); alert('Đã nhập tiến độ thành công!'); }catch(err){ alert('File không hợp lệ.'); } };
+    reader.readAsText(file);
+  }
+});
+/* initial render */
+if(S.dark) document.body.classList.add('dark');
+render();
+})();
+</script>
+</body>
+</html>
